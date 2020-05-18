@@ -15,6 +15,8 @@
     <Folder Include="Data\Context\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Profile\" />
+    <Folder Include="Dtos\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

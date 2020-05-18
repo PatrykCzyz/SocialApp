@@ -9,7 +9,7 @@ using TwitterMvc.Data.Context;
 
 namespace TwitterMvc.Data.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(IdentityDatabaseContext))]
     [Migration("20200512210946_Initial")]
     partial class Initial
     {

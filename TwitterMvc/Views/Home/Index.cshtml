@@ -1,1 +1,10 @@
-﻿<h1>Home</h1>
+﻿@model List<TwitterMvc.Dtos.UserListItem>
+
+<h1>Home</h1>
+
+<ol>
+    @foreach (var user in Model)
+    {
+        <li>@user.Username</li>
+    }
+</ol>

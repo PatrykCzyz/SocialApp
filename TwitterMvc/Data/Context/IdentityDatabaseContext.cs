@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TwitterMvc.Data.Context
 {
-    public class AppDbContext : IdentityDbContext
+    public class IdentityDatabaseContext : IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
             : base(options)
         {
         }

@@ -29,7 +29,7 @@ namespace TwitterMvc
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<IdentityDatabaseContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
@@ -43,7 +43,7 @@ namespace TwitterMvc
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
             })
-                .AddEntityFrameworkStores<AppDbContext>()
+                .AddEntityFrameworkStores<IdentityDatabaseContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMailKit(config => config.UseMailKit(_config.GetSection("Email").Get<MailKitOptions>()));

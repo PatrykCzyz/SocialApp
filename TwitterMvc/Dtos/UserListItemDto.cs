@@ -7,9 +7,11 @@ namespace TwitterMvc.Dtos
     {
 		public UserListItem(IdentityUser user)
 		{
+			Id = user.Id;
 			Username = user.UserName;
 		}
 
-		public string Username { get; set; }
+        public string Id { get; set; }
+        public string Username { get; set; }
 	}
 }

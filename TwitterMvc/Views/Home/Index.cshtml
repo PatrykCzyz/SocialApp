@@ -5,6 +5,10 @@
 <ol>
     @foreach (var user in Model)
     {
-        <li>@user.Username</li>
+        <li>
+            <a asp-controller="Profile" asp-action="Index" asp-route-userId="@user.Id">
+                @user.Username
+            </a>
+        </li>
     }
 </ol>

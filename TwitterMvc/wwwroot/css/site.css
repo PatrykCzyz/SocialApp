@@ -81,3 +81,63 @@ body {
     background: #337bf6;
     color: white;
 }
+
+
+.profile-avatar {
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 25px;
+}
+
+.profile-avatar img {
+    width: 75%;
+    margin: auto auto;
+    display: block;
+    padding: 10px;
+    padding-top: 30px;
+}
+
+.profile-avatar-info {
+    text-align: center;
+    padding: 5px 10px;
+}
+
+.profile-avatar-info-username {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.right-field {
+    text-align: center;
+}
+
+.profile-buttons {
+    margin: 15px;
+}
+
+.follow-button {
+    background: #f03434;
+    color: white;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.follow-text {
+    padding: 10px;
+    padding-left: 40px;
+}
+
+.follow-number {
+    background: #f64747;
+    padding: 10px;
+    font-size: 18px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.profile-info-field {
+    padding: 5px;
+}

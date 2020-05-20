@@ -23,11 +23,9 @@ namespace TwitterMvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var profile = new ProfileDto();
-
             var user = await _userManager.GetUserAsync(User);
 
-            profile.Username = user.UserName;
+            var profile = new ProfileDto(user);
 
             return View(profile);
         }
@@ -35,11 +33,9 @@ namespace TwitterMvc.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> Index(string userId)
         {
-            var profile = new ProfileDto();
-
             var user = await _userManager.FindByIdAsync(userId);
 
-            profile.Username = user.UserName;
+            var profile = new ProfileDto(user);
 
             return View(profile);
         }

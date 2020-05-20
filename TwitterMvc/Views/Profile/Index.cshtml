@@ -1,3 +1,52 @@
 ﻿@model TwitterMvc.Dtos.ProfileDto
 
-<h1>@Model.Username</h1>
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="profile-avatar">
+            <img src="/img/boy.png" />
+            <div class="profile-avatar-info">
+                <p class="profile-avatar-info-username">@Model.Username</p>
+            </div>
+        </div>
+        <div class="row follow-button">
+            <div class="col-md-9 follow-text">
+                Follow
+            </div>
+            <div class="col-md-3 follow-number">
+                15
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 pl-5">
+        <div class="row">
+            <div class="col-md-5 p-3">
+                <h4 class="mb-3 text-center">Information</h4>
+                <div class="profile-info-field">Email: @Model.Email</div>
+                <div class="profile-info-field">Name: Patryk</div>
+                <div class="profile-info-field">Last name: Czyż</div>
+                <div class="profile-info-field">Age: 20</div>
+                <div class="profile-info-field">Gender: Male</div>
+                <div class="profile-info-field">Country: Poland</div>
+            </div>
+            <div class="col-md-4 p-3">
+                <h4 class="mb-3 text-center">Social media</h4>
+            </div>
+            <div class="col-md-3 right-field">
+
+                <a href="" class="btn btn-info profile-buttons">Send Question</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mt-5"></div>
+
+
+
+
+
+
+
+
+

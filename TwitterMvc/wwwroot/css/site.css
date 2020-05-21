@@ -83,6 +83,10 @@ body {
 }
 
 
+.information {
+    padding: 0 25px;
+}
+
 .profile-avatar {
     width: 100%;
     background-color: white;
@@ -113,31 +117,64 @@ body {
 }
 
 .profile-buttons {
-    margin: 15px;
+    margin-top: 15px;
+    width: 100%;
 }
 
 .follow-button {
     background: #f03434;
     color: white;
-    border-radius: 5px;
-    font-size: 20px;
-    font-weight: 500;
+    border-radius: .25rem;
     text-align: center;
+    margin: 0;
 }
 
 .follow-text {
-    padding: 10px;
-    padding-left: 40px;
+    padding: .4rem .1rem;
 }
 
 .follow-number {
     background: #f64747;
-    padding: 10px;
-    font-size: 18px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
+    padding: .4rem .1rem;
+    border-bottom-right-radius: .25rem;
+    border-top-right-radius: .25rem;
 }
 
 .profile-info-field {
     padding: 5px;
+}
+
+.post {
+    padding: 50px;
+    padding-top: 35px;
+    padding-bottom: 60px;
+    margin: auto auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    margin-bottom: 30px;
+}
+
+.post-title {
+    font-weight: 600;
+    font-size: 20px;
+    padding-bottom: 15px;
+}
+
+.post-text {
+    font-size: 16px;
+}
+
+.post-date {
+    margin-top: 20px;
+    color: gray;
+    float: right;
+    font-size: 14px;
+}
+
+.social {
+    margin-top: 25px;
+    margin-bottom: 25px
+}
+
+.social-png img {
+    width: 100%;
 }

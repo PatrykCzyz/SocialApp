@@ -1,43 +1,52 @@
-﻿@model TwitterMvc.Models.CustomUser
+﻿@model TwitterMvc.Dtos.RegisterDto
 @using TwitterMvc.Enums
 
     <form class="p-4" asp-action="Register" method="post">
         <div class="form-group">
             <label>Username</label>
             <input asp-for="@Model.UserName" class="form-control" placeholder="Username">
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Email</label>
             <input asp-for="@Model.Email" type="email" class="form-control" placeholder="Email">
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Name</label>
             <input asp-for="@Model.Name" class="form-control" placeholder="Name">
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Lastname</label>
             <input asp-for="@Model.Lastname" class="form-control" placeholder="Lastname">
+            @Html.ValidationMessageFor(model => model.Lastname, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Gender</label>
             <select asp-for="@Model.Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control">
             </select>
+            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Age</label>
             <input asp-for="@Model.Age" class="form-control" placeholder="Age">
+            @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Country</label>
             <input asp-for="@Model.Country" class="form-control" placeholder="Country">
+            @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Password">
+            <input asp-for="@Model.Password" type="password" class="form-control" placeholder="Password">
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label>Password confirmation</label>
-            <input type="password" name="passwordConfirmation" class="form-control" placeholder="Password confirmation">
+            <input asp-for="@Model.PasswordConfirmation" type="password" class="form-control" placeholder="Password confirmation">
+            @Html.ValidationMessageFor(model => model.PasswordConfirmation, "", new { @class = "text-danger" })
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
     </form>

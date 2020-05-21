@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
+using TwitterMvc.Dtos;
 using TwitterMvc.Models;
 
 namespace TwitterMvc.Controllers
@@ -50,22 +51,26 @@ namespace TwitterMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(CustomUser user, string password, string passwordConfirmation)
+        public async Task<IActionResult> Register(RegisterDto data)
         {
-            var result = await _userManager.CreateAsync(user, password);
-
-
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
+                var user = new CustomUser(data);
 
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var result = await _userManager.CreateAsync(user, data.Password);
 
-                var link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+                if (result.Succeeded)
+                {
+                    await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
 
-                await _emailService.SendAsync(user.Email, "Email verification", $"<a href=\"{link}\">Click</a>", true);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                return RedirectToAction(nameof(EmailVerification));
+                    var link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+
+                    await _emailService.SendAsync(user.Email, "Email verification", $"<a href=\"{link}\">Click</a>", true);
+
+                    return RedirectToAction(nameof(EmailVerification));
+                }
             }
 
             return View();

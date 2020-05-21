@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TwitterMvc.Models;
 
 namespace TwitterMvc.Data.Context
 {
@@ -10,5 +11,7 @@ namespace TwitterMvc.Data.Context
             : base(options)
         {
         }
+
+        public DbSet<CustomUser> CustomUsers { get; set; }
     }
 }

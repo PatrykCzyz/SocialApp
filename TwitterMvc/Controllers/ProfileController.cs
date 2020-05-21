@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TwitterMvc.Dtos;
+using TwitterMvc.Models;
 
 namespace TwitterMvc.Controllers
 {
     [Route("[controller]")]
     public class ProfileController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<CustomUser> _userManager;
 
-        public ProfileController(UserManager<IdentityUser> userManager)
+        public ProfileController(UserManager<CustomUser> userManager)
         {
             _userManager = userManager;
         }

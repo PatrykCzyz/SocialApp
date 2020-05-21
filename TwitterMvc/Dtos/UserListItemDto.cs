@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
+using TwitterMvc.Models;
 
 namespace TwitterMvc.Dtos
 {
     public class UserListItem
     {
-		public UserListItem(IdentityUser user)
+		public UserListItem(CustomUser user)
 		{
 			Id = user.Id;
 			Username = user.UserName;

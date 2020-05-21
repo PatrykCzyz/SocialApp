@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using TwitterMvc.Data.Context;
+using TwitterMvc.Models;
 
 namespace TwitterMvc
 {
@@ -32,7 +33,7 @@ namespace TwitterMvc
             services.AddDbContext<IdentityDatabaseContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            services.AddIdentity<CustomUser, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;
 

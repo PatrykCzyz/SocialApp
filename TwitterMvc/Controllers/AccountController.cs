@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
+using TwitterMvc.Models;
 
 namespace TwitterMvc.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<CustomUser> _userManager;
+        private readonly SignInManager<CustomUser> _signInManager;
         private readonly IEmailService _emailService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailService emailService)
+        public AccountController(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -49,15 +50,10 @@ namespace TwitterMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string email, string password)
+        public async Task<IActionResult> Register(CustomUser user, string password, string passwordConfirmation)
         {
-            var user = new IdentityUser
-            {
-                UserName = username,
-                Email = email
-            };
-
             var result = await _userManager.CreateAsync(user, password);
+
 
             if (result.Succeeded)
             {
@@ -67,7 +63,7 @@ namespace TwitterMvc.Controllers
 
                 var link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
 
-                await _emailService.SendAsync(email, "Email verification", $"<a href=\"{link}\">Click</a>", true);
+                await _emailService.SendAsync(user.Email, "Email verification", $"<a href=\"{link}\">Click</a>", true);
 
                 return RedirectToAction(nameof(EmailVerification));
             }

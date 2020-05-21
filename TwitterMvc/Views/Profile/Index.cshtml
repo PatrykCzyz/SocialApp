@@ -1,9 +1,13 @@
 ﻿@model TwitterMvc.Dtos.ProfileDto
+@{
+    var img = $"/img/{Model.Gender}.png";
+}
+
 
     <div class="row mt-4">
         <div class="col-md-3 information">
             <div class="profile-avatar">
-                <img src="/img/boy.png" />
+                <img src="@img" />
                 <div class="profile-avatar-info">
                     <p class="profile-avatar-info-username">@Model.Username</p>
                 </div>

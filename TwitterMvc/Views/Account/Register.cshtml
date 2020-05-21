@@ -1,4 +1,5 @@
 ﻿@model TwitterMvc.Models.CustomUser
+@using TwitterMvc.Enums
 
     <form class="p-4" asp-action="Register" method="post">
         <div class="form-group">
@@ -19,7 +20,8 @@
         </div>
         <div class="form-group">
             <label>Gender</label>
-            <input asp-for="@Model.Gender" class="form-control" placeholder="Gender">
+            <select asp-for="@Model.Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-control">
+            </select>
         </div>
         <div class="form-group">
             <label>Age</label>

@@ -178,3 +178,12 @@ body {
 .social-png img {
     width: 100%;
 }
+
+.profile-link {
+    color: black;
+}
+
+.profile-link:hover {
+    color: black;
+    text-decoration-color: gray;
+}

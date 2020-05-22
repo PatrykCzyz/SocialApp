@@ -1,14 +1,26 @@
-﻿@model List<TwitterMvc.Dtos.UserListItem>
+﻿@using TwitterMvc.Enums;
 
-<h1>Home</h1>
+@model List<TwitterMvc.Dtos.UserListItem>
+@{
+    string GetImg(GenderEnum gender)
+    {
+        return $"/img/{gender}.png";
+    }
+}
 
-<ol>
+
+<div class="row mt-5">
     @foreach (var user in Model)
     {
-        <li>
-            <a asp-controller="Profile" asp-action="Index" asp-route-userId="@user.Id">
-                @user.Username
-            </a>
-        </li>
+    <div class="col-md-3">
+        <a class="profile-link" asp-controller="Profile" asp-action="Index" asp-route-userId="@user.Id">
+            <div class="profile-avatar">
+                <img src="@GetImg(user.Gender)" />
+                <div class="profile-avatar-info">
+                    <p class="profile-avatar-info-username">@user.Username</p>
+                </div>
+            </div>
+        </a>
+    </div>
     }
-</ol>
+</div>

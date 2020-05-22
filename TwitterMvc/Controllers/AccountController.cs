@@ -28,20 +28,23 @@ namespace TwitterMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(LoginDto data)
         {
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
+                var user = await _userManager.FindByNameAsync(data.UserName);
 
-                if (signInResult.Succeeded)
+                if (user != null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, data.Password, false, false);
+
+                    if (signInResult.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
-
+            
             return View();
         }
 

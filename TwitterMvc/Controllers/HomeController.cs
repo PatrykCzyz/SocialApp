@@ -17,6 +17,7 @@ namespace TwitterMvc.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var usersList = await _context.CustomUsers

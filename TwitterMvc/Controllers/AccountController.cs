@@ -22,6 +22,7 @@ namespace TwitterMvc.Controllers
             _emailService = emailService;
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -48,6 +49,7 @@ namespace TwitterMvc.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -79,6 +81,7 @@ namespace TwitterMvc.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> VerifyEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -95,8 +98,10 @@ namespace TwitterMvc.Controllers
             return BadRequest();
         }
 
+        [HttpGet]
         public IActionResult EmailVerification() => View();
 
+        [HttpGet]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();

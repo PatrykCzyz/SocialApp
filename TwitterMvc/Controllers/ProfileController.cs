@@ -16,12 +16,10 @@ namespace TwitterMvc.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<CustomUser> _userManager;
-        private readonly AppDatabaseContext _context;
 
-        public ProfileController(UserManager<CustomUser> userManager, AppDatabaseContext context)
+        public ProfileController(UserManager<CustomUser> userManager)
         {
             _userManager = userManager;
-            _context = context;
         }
 
         [Authorize]

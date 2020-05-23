@@ -5,7 +5,7 @@ using TwitterMvc.Models;
 
 namespace TwitterMvc.Data.Context
 {
-    public class IdentityDatabaseContext : IdentityDbContext
+    public class IdentityDatabaseContext : IdentityDbContext<CustomUser>
     {
         public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
             : base(options)
@@ -14,5 +14,6 @@ namespace TwitterMvc.Data.Context
         }
 
         public DbSet<CustomUser> CustomUsers { get; set; }
+        public DbSet<Post> Posts { get; set; }
     }
 }

@@ -32,10 +32,7 @@ namespace TwitterMvc
 
             services.AddDbContext<IdentityDatabaseContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
-
-            services.AddDbContext<AppDatabaseContext>(options =>
-                options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
-
+        
             services.AddIdentity<CustomUser, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;

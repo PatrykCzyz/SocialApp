@@ -10,6 +10,7 @@ namespace TwitterMvc.Data.Context
         public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<CustomUser> CustomUsers { get; set; }

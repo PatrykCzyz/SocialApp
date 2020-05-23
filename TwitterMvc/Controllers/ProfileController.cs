@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
 using TwitterMvc.Models;
 
@@ -14,10 +16,12 @@ namespace TwitterMvc.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<CustomUser> _userManager;
+        private readonly AppDatabaseContext _context;
 
-        public ProfileController(UserManager<CustomUser> userManager)
+        public ProfileController(UserManager<CustomUser> userManager, AppDatabaseContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [Authorize]

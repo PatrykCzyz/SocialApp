@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using TwitterMvc.Dtos;
 using TwitterMvc.Enums;
@@ -28,5 +29,7 @@ namespace TwitterMvc.Models
         public int Age { get; set; }
         public GenderEnum Gender { get; set; }
         public string Country { get; set; }
+
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

@@ -33,6 +33,9 @@ namespace TwitterMvc
             services.AddDbContext<IdentityDatabaseContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
 
+            services.AddDbContext<AppDatabaseContext>(options =>
+                options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
+
             services.AddIdentity<CustomUser, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;
@@ -62,6 +65,7 @@ namespace TwitterMvc
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

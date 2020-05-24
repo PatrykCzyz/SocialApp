@@ -54,13 +54,11 @@
     <div class="col-md-9 posts">
         @if (SignInManager.IsSignedIn(User) && ViewData["userId"] == null || ViewData["userId"].ToString() == UserManager.GetUserId(User))
         {
-            <form asp-action="Post" method="post">
+            <form asp-action="Post" method="post" class="mb-5">
                 <div class="form-group">
-                    <label>Title</label>
                     <input asp-for="@postDto.Title" type="text" class="form-control" placeholder="Title">
                 </div>
                 <div class="form-group">
-                    <label>Content</label>
                     <textarea asp-for="@postDto.Content" class="form-control" rows="3" placeholder="Content of your post..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-success">Post</button>
@@ -71,10 +69,10 @@
         {
             <div class="post">
                 <div class="post-title">
-                    @post.Title;
+                    @post.Title
                 </div>
                 <div class="post-text">
-                    @post.Content;
+                    @post.Content
                 </div>
                 <div class="post-date">
                     @post.DateTime

@@ -16,10 +16,12 @@ namespace TwitterMvc.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<CustomUser> _userManager;
+        private readonly IdentityDatabaseContext _context;
 
-        public ProfileController(UserManager<CustomUser> userManager)
+        public ProfileController(UserManager<CustomUser> userManager, IdentityDatabaseContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [Authorize]
@@ -27,7 +29,6 @@ namespace TwitterMvc.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-
             var profile = new ProfileDto(user);
 
             return View(profile);
@@ -37,10 +38,18 @@ namespace TwitterMvc.Controllers
         public async Task<IActionResult> Index(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
             var profile = new ProfileDto(user);
 
+            ViewData["userId"] = userId;
+
             return View(profile);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Post(PostDto postDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

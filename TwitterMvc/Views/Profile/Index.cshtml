@@ -1,80 +1,104 @@
-﻿@model TwitterMvc.Dtos.ProfileDto
+﻿@inject SignInManager<CustomUser> SignInManager;
+@inject UserManager<CustomUser> UserManager
+
+@using TwitterMvc.Dtos;
+@using TwitterMvc.Models;
+@using Microsoft.AspNetCore.Identity;
+
+@model TwitterMvc.Dtos.ProfileDto
 @{
     var img = $"/img/{Model.Gender}.png";
+
+    var postDto = new PostDto();
 }
 
 
-    <div class="row mt-4">
-        <div class="col-md-3 information">
-            <div class="profile-avatar">
-                <img src="@img" />
-                <div class="profile-avatar-info">
-                    <p class="profile-avatar-info-username">@Model.Username</p>
-                </div>
+<div class="row mt-4">
+    <div class="col-md-3 information">
+        <div class="profile-avatar">
+            <img src="@img" />
+            <div class="profile-avatar-info">
+                <p class="profile-avatar-info-username">@Model.Username</p>
             </div>
-            <div class="row follow-button">
-                <div class="col-md-9 follow-text">
-                    Follow
-                </div>
-                <div class="col-md-3 follow-number">
-                    15
-                </div>
-            </div>
-            <a href="" class="btn btn-info profile-buttons">Send Question</a>
-            <div class="row social">
-                <div class="col-md-3 social-png">
-                    <img src="/img/fb.png" />
-                </div>
-                <div class="col-md-3 social-png">
-                    <img src="/img/ig.png" />
-                </div>
-                <div class="col-md-3 social-png">
-                    <img src="/img/gh.png" />
-                </div>
-                <div class="col-md-3 social-png">
-                    <img src="/img/yt.png" />
-                </div>
-            </div>
-            <h4 class="">Information</h4>
-            <div class="profile-info-field">Email: @Model.Email</div>
-            <div class="profile-info-field">Name: @Model.Name @Model.Lastname</div>
-            <div class="profile-info-field">Age: @Model.Age</div>
-            <div class="profile-info-field">Gender: @Model.Gender</div>
-            <div class="profile-info-field">Country: @Model.Country</div>
         </div>
-        <div class="col-md-9 posts">
-            <div class="post">
-                <div class="post-title">
-                    What is Lorem Ipsum?
-                </div>
-                <div class="post-text">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-                <div class="post-date">
-                    15:44  |  28.05.2020
-                </div>
+        <div class="row follow-button">
+            <div class="col-md-9 follow-text">
+                Follow
             </div>
-            <div class="post">
-                <div class="post-title">
-                    What is Lorem Ipsum?
-                </div>
-                <div class="post-text">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-                <div class="post-date">
-                    15:44  |  28.05.2020
-                </div>
+            <div class="col-md-3 follow-number">
+                15
             </div>
-            <div class="post">
-                <div class="post-title">
-                    What is Lorem Ipsum?
+        </div>
+        <a href="" class="btn btn-info profile-buttons">Send Question</a>
+        <div class="row social">
+            <div class="col-md-3 social-png">
+                <img src="/img/fb.png" />
+            </div>
+            <div class="col-md-3 social-png">
+                <img src="/img/ig.png" />
+            </div>
+            <div class="col-md-3 social-png">
+                <img src="/img/gh.png" />
+            </div>
+            <div class="col-md-3 social-png">
+                <img src="/img/yt.png" />
+            </div>
+        </div>
+        <h4 class="">Information</h4>
+        <div class="profile-info-field">Email: @Model.Email</div>
+        <div class="profile-info-field">Name: @Model.Name @Model.Lastname</div>
+        <div class="profile-info-field">Age: @Model.Age</div>
+        <div class="profile-info-field">Gender: @Model.Gender</div>
+        <div class="profile-info-field">Country: @Model.Country</div>
+    </div>
+    <div class="col-md-9 posts">
+        @if (SignInManager.IsSignedIn(User) && ViewData["userId"] == null || ViewData["userId"].ToString() == UserManager.GetUserId(User))
+        {
+            <form asp-action="Post" method="post">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input asp-for="@postDto.Title" type="text" class="form-control" placeholder="Title">
                 </div>
-                <div class="post-text">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea asp-for="@postDto.Content" class="form-control" rows="3" placeholder="Content of your post..."></textarea>
                 </div>
-                <div class="post-date">
-                    15:44  |  28.05.2020
-                </div>
+                <button type="submit" class="btn btn-success">Post</button>
+            </form>
+        }
+
+        <div class="post">
+            <div class="post-title">
+                What is Lorem Ipsum?
+            </div>
+            <div class="post-text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+            <div class="post-date">
+                15:44  |  28.05.2020
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-title">
+                What is Lorem Ipsum?
+            </div>
+            <div class="post-text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+            <div class="post-date">
+                15:44  |  28.05.2020
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-title">
+                What is Lorem Ipsum?
+            </div>
+            <div class="post-text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+            <div class="post-date">
+                15:44  |  28.05.2020
             </div>
         </div>
     </div>
+</div>

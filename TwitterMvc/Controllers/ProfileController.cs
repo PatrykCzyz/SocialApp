@@ -41,7 +41,8 @@ namespace TwitterMvc.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var profile = new ProfileDto(user);
 
-            ViewData["userId"] = userId;
+            ViewData["userId"] = user.Id;
+            ViewData["posts"] = await _postService.GetPosts(user.Id);
 
             return View(profile);
         }

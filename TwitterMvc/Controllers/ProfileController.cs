@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
 using TwitterMvc.Models;
+using TwitterMvc.Services.Interfaces;
 
 namespace TwitterMvc.Controllers
 {
@@ -16,12 +17,12 @@ namespace TwitterMvc.Controllers
     public class ProfileController : Controller
     {
         private readonly UserManager<CustomUser> _userManager;
-        private readonly IdentityDatabaseContext _context;
+        private readonly IPostService _postService;
 
-        public ProfileController(UserManager<CustomUser> userManager, IdentityDatabaseContext context)
+        public ProfileController(UserManager<CustomUser> userManager, IPostService postService)
         {
             _userManager = userManager;
-            _context = context;
+            _postService = postService;
         }
 
         [Authorize]
@@ -49,7 +50,12 @@ namespace TwitterMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(PostDto postDto)
         {
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                await _postService.CreatePost(postDto);
+            }
+
+            return View(nameof(Index));
         }
     }
 }

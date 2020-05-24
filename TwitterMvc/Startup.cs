@@ -14,6 +14,8 @@ using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Models;
+using TwitterMvc.Services;
+using TwitterMvc.Services.Interfaces;
 
 namespace TwitterMvc
 {
@@ -48,6 +50,8 @@ namespace TwitterMvc
                 .AddDefaultTokenProviders();
 
             services.AddMailKit(config => config.UseMailKit(_config.GetSection("Email").Get<MailKitOptions>()));
+
+            services.AddScoped<IPostService, PostService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

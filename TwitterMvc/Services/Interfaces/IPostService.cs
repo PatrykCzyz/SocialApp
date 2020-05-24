@@ -10,6 +10,6 @@ namespace TwitterMvc.Services.Interfaces
         public Task CreatePost(PostDto postDto);
         public Task RemovePost(int postId);
         public Task EditPost(int postId, PostDto postDto);
-        public Task<List<PostDto>> GetPosts();
+        public Task<List<PostDto>> GetPosts(string userId);
     }
 }

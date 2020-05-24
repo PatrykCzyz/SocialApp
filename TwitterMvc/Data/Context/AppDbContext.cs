@@ -5,9 +5,9 @@ using TwitterMvc.Models;
 
 namespace TwitterMvc.Data.Context
 {
-    public class IdentityDatabaseContext : IdentityDbContext<CustomUser>
+    public class AppDbContext : IdentityDbContext<CustomUser>
     {
-        public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
 

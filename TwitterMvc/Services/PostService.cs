@@ -12,9 +12,9 @@ namespace TwitterMvc.Services
 {
     public class PostService : IPostService
     {
-        private readonly IdentityDatabaseContext _context;
+        private readonly AppDbContext _context;
 
-        public PostService(IdentityDatabaseContext context)
+        public PostService(AppDbContext context)
         {
             _context = context;
         }
@@ -32,11 +32,11 @@ namespace TwitterMvc.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<PostDto>> GetPosts(string userId)
+        public async Task<List<GetPostDto>> GetPosts(string userId)
         {
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
 
-            var result = data.Select(post => new PostDto(post)).ToList();
+            var result = data.Select(post => new GetPostDto(post)).ToList();
 
             return result;
         }

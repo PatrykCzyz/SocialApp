@@ -10,9 +10,9 @@ namespace TwitterMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IdentityDatabaseContext _context;
+        private readonly AppDbContext _context;
 
-        public HomeController(IdentityDatabaseContext context)
+        public HomeController(AppDbContext context)
         {
             _context = context;
         }

@@ -3,14 +3,15 @@ using TwitterMvc.Models;
 
 namespace TwitterMvc.Dtos
 {
-    public class PostDto
+    public class GetPostDto
     {
-        public PostDto()
+
+        public GetPostDto()
         {
 
         }
 
-        public PostDto(Post post)
+        public GetPostDto(Post post)
         {
             Title = post.Title;
             Content = post.Content;

@@ -32,8 +32,8 @@ namespace TwitterMvc
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<IdentityDatabaseContext>(options =>
-                options.UseSqlServer(_config.GetConnectionString("TwitterDatabase")));
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(_config.GetConnectionString("Database")));
         
             services.AddIdentity<CustomUser, IdentityRole>(config =>
             {
@@ -46,7 +46,7 @@ namespace TwitterMvc
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
             })
-                .AddEntityFrameworkStores<IdentityDatabaseContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMailKit(config => config.UseMailKit(_config.GetSection("Email").Get<MailKitOptions>()));

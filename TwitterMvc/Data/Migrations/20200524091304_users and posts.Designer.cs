@@ -9,9 +9,9 @@ using TwitterMvc.Data.Context;
 
 namespace TwitterMvc.Data.Migrations
 {
-    [DbContext(typeof(IdentityDatabaseContext))]
-    [Migration("20200524084237_post datetime")]
-    partial class postdatetime
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20200524091304_users and posts")]
+    partial class usersandposts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

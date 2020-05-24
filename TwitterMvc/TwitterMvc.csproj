@@ -20,6 +20,8 @@
     <Folder Include="Enums\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
+    <Folder Include="Dtos\PostDtos\" />
+    <Folder Include="Dtos\AccountDtos\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

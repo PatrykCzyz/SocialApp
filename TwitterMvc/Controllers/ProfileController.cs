@@ -32,6 +32,8 @@ namespace TwitterMvc.Controllers
             var user = await _userManager.GetUserAsync(User);
             var profile = new ProfileDto(user);
 
+            ViewData["posts"] = await _postService.GetPosts(user.Id);
+
             return View(profile);
         }
 
@@ -53,10 +55,12 @@ namespace TwitterMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _postService.CreatePost(postDto);
+                var userId = _userManager.GetUserId(User);
+
+                await _postService.CreatePost(userId, postDto);
             }
 
-            return View(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

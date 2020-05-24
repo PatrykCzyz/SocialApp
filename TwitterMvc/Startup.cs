@@ -10,8 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NETCore.MailKit.Extensions;
-using NETCore.MailKit.Infrastructure.Internal;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Models;
 using TwitterMvc.Services;
@@ -37,8 +35,6 @@ namespace TwitterMvc
         
             services.AddIdentity<CustomUser, IdentityRole>(config =>
             {
-                config.SignIn.RequireConfirmedEmail = true;
-
                 //temp
                 config.Password.RequireDigit = false;
                 config.Password.RequiredLength = 1;
@@ -48,8 +44,6 @@ namespace TwitterMvc
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddMailKit(config => config.UseMailKit(_config.GetSection("Email").Get<MailKitOptions>()));
 
             services.AddScoped<IPostService, PostService>();
         }

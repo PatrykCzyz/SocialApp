@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NETCore.MailKit.Core;
 using TwitterMvc.Dtos;
 using TwitterMvc.Models;
 
@@ -13,13 +12,11 @@ namespace TwitterMvc.Controllers
     {
         private readonly UserManager<CustomUser> _userManager;
         private readonly SignInManager<CustomUser> _signInManager;
-        private readonly IEmailService _emailService;
 
-        public AccountController(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager, IEmailService emailService)
+        public AccountController(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailService = emailService;
         }
 
         [HttpGet]
@@ -66,40 +63,12 @@ namespace TwitterMvc.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "User"));
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                    var link = Url.Action(nameof(VerifyEmail), "Account", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
-
-                    await _emailService.SendAsync(user.Email, "Email verification", $"<a href=\"{link}\">Click</a>", true);
-
-                    return RedirectToAction(nameof(EmailVerification));
+                    return RedirectToAction(nameof(Login));
                 }
             }
 
             return View();
         }
-
-        [HttpGet]
-        public async Task<IActionResult> VerifyEmail(string userId, string code)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null) return BadRequest();
-
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-
-            if (result.Succeeded)
-            {
-                return View();
-            }
-
-            return BadRequest();
-        }
-
-        [HttpGet]
-        public IActionResult EmailVerification() => View();
 
         [HttpGet]
         public async Task<IActionResult> LogOut()

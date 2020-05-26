@@ -1,3 +1,3 @@
 # SocialApp
 
-Live: <a href="socialapp.patrykczyz.pl">socialapp.patrykczyz.pl</a>
+Live: <a href="https://socialapp.patrykczyz.pl" target="_blank">socialapp.patrykczyz.pl</a>

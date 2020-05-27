@@ -30,26 +30,28 @@
             </div>
         </div>
         <a href="" class="btn btn-info profile-buttons">Send Question</a>
-        <div class="row social">
-            <div class="col-md-3 social-png">
-                <img src="/img/fb.png" />
-            </div>
-            <div class="col-md-3 social-png">
-                <img src="/img/ig.png" />
-            </div>
-            <div class="col-md-3 social-png">
-                <img src="/img/gh.png" />
-            </div>
-            <div class="col-md-3 social-png">
-                <img src="/img/yt.png" />
-            </div>
-        </div>
-        <h4 class="">Information</h4>
+        
+        <h4 class="profile-info">Information</h4>
         <div class="profile-info-field">Email: @Model.Email</div>
         <div class="profile-info-field">Name: @Model.Name @Model.Lastname</div>
         <div class="profile-info-field">Age: @Model.Age</div>
         <div class="profile-info-field">Gender: @Model.Gender</div>
         <div class="profile-info-field">Country: @Model.Country</div>
+        
+        <div class="social">
+            <div class="social-png">
+                <img src="/img/fb.png" />
+            </div>
+            <div class="social-png">
+                <img src="/img/ig.png" />
+            </div>
+            <div class="social-png">
+                <img src="/img/gh.png" />
+            </div>
+            <div class="social-png">
+                <img src="/img/yt.png" />
+            </div>
+        </div>
     </div>
     <div class="col-md-9 posts">
         @if (SignInManager.IsSignedIn(User) && ViewData["userId"] == null || ViewData["userId"].ToString() == UserManager.GetUserId(User))

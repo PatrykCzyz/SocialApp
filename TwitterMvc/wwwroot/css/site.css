@@ -144,12 +144,17 @@ body {
     padding: 5px;
 }
 
+.profile-info {
+    margin-top: 25px;
+}
+
 .post {
     padding: 50px;
     padding-top: 35px;
     padding-bottom: 60px;
     margin: auto auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
     margin-bottom: 30px;
 }
 
@@ -171,8 +176,14 @@ body {
 }
 
 .social {
-    margin-top: 25px;
-    margin-bottom: 25px
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+.social-png {
+    float: left;
+    width: 25%;
+    padding: 5px;
 }
 
 .social-png img {

@@ -20,15 +20,17 @@ namespace TwitterMvc.Services
             _context = context;
         }
 
-        public async Task CreatePost(string userId, PostDto postDto)
+        public async Task<ReturnValues<bool>> CreatePost(string userId, PostDto postDto)
         {
             var post = new Post(userId, postDto);
 
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
+
+            return new ReturnValues<bool>(true);
         }
 
-        public Task EditPost(int postId, PostDto postDto)
+        public Task<ReturnValues<bool>> EditPost(int postId, PostDto postDto)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +54,7 @@ namespace TwitterMvc.Services
             return new ReturnValues<List<GetPostDto>>(result);
         }
 
-        public Task RemovePost(int postId)
+        public Task<ReturnValues<bool>> RemovePost(int postId)
         {
             throw new NotImplementedException();
         }

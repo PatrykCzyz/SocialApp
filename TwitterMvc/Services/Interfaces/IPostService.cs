@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TwitterMvc.Dtos;
+using TwitterMvc.Helpers;
 
 namespace TwitterMvc.Services.Interfaces
 {
@@ -10,6 +11,6 @@ namespace TwitterMvc.Services.Interfaces
         public Task CreatePost(string userId, PostDto postDto);
         public Task RemovePost(int postId);
         public Task EditPost(int postId, PostDto postDto);
-        public Task<List<GetPostDto>> GetPosts(string userId);
+        public Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId);
     }
 }

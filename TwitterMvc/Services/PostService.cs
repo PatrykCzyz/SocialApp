@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
+using TwitterMvc.Helpers;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 
@@ -32,13 +33,15 @@ namespace TwitterMvc.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<GetPostDto>> GetPosts(string userId)
+        public async Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId)
         {
+            var returnValues = new ReturnValues<List<GetPostDto>>();
+            
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
 
-            var result = data.Select(post => new GetPostDto(post)).ToList();
+            returnValues.Result = data.Select(post => new GetPostDto(post)).ToList();
 
-            return result;
+            return returnValues;
         }
 
         public Task RemovePost(int postId)

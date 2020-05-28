@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Mvc;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
 
@@ -21,6 +19,7 @@ namespace TwitterMvc.Tests
         private PostService _postService;
         private string userId = "1cd5f732-3a43-446b-978d-070bbd007a7d";
         private string wrongUserId = "7dd0e8d2-2059-4fa3-9ed9-d1968c872e0b";
+        private ErrorService _errorService;
 
         [SetUp]
         public void Setup()
@@ -29,6 +28,8 @@ namespace TwitterMvc.Tests
                 .UseInMemoryDatabase(databaseName: "SocialAppTestDb").Options;
 
             _context = new AppDbContext(options);
+            _errorService = new ErrorService();
+            _postService = new PostService(_context, _errorService);
 
             _context.Add(new CustomUser
             {
@@ -43,9 +44,6 @@ namespace TwitterMvc.Tests
             });
 
             _context.SaveChanges();
-
-
-            _postService = new PostService(_context);
         }
 
         [TearDown]
@@ -145,7 +143,7 @@ namespace TwitterMvc.Tests
 
             //Arrange
             Assert.False(result.Succeeded);
-            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
         }
 
         [Test]
@@ -158,7 +156,7 @@ namespace TwitterMvc.Tests
 
             //Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
         }
 
         [Test]
@@ -171,7 +169,7 @@ namespace TwitterMvc.Tests
             
             //Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("There is no post yet!",result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("NoPost"),result.ErrorMessage);
         }
         
         #endregion
@@ -234,7 +232,7 @@ namespace TwitterMvc.Tests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
         }
         
         [Test]
@@ -253,7 +251,7 @@ namespace TwitterMvc.Tests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
 
@@ -273,7 +271,7 @@ namespace TwitterMvc.Tests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
 
@@ -288,7 +286,7 @@ namespace TwitterMvc.Tests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         

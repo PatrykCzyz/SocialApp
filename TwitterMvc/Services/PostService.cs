@@ -14,10 +14,12 @@ namespace TwitterMvc.Services
     public class PostService : IPostService
     {
         private readonly AppDbContext _context;
+        private readonly IErrorService _errorService;
 
-        public PostService(AppDbContext context)
+        public PostService(AppDbContext context, IErrorService errorService)
         {
             _context = context;
+            _errorService = errorService;
         }
 
         public async Task<ReturnValues<bool>> CreatePost(string userId, PostDto postDto)
@@ -40,13 +42,13 @@ namespace TwitterMvc.Services
             var userExist = await _context.Users.AnyAsync(x => x.Id == userId);
             if (userId == null || !userExist)
             {
-                return new ReturnValues<List<GetPostDto>>("User doesn't exist.");
+                return new ReturnValues<List<GetPostDto>>(_errorService.GetError("UserDosentExist"));
             }
             
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
             if (data.Count == 0)
             {
-                return new ReturnValues<List<GetPostDto>>("There is no post yet!");
+                return new ReturnValues<List<GetPostDto>>(_errorService.GetError("NoPost"));
             }
 
             var result= data.Select(post => new GetPostDto(post)).ToList();

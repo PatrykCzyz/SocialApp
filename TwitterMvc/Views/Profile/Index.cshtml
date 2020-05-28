@@ -7,8 +7,6 @@
 
 @model TwitterMvc.Dtos.ProfileDto
 @{
-    var img = $"/img/{Model.Gender}.png";
-
     var postDto = new PostDto();
 }
 
@@ -16,7 +14,7 @@
 <div class="row mt-4">
     <div class="col-md-3 information">
         <div class="profile-avatar">
-            <img src="@img" />
+            <img src="@ViewBag.Avatar" />
             <div class="profile-avatar-info">
                 <p class="profile-avatar-info-username">@Model.Username</p>
             </div>
@@ -54,7 +52,7 @@
         </div>
     </div>
     <div class="col-md-9 posts">
-        @if (SignInManager.IsSignedIn(User) && ViewData["userId"] == null || ViewData["userId"].ToString() == UserManager.GetUserId(User))
+        @if (SignInManager.IsSignedIn(User) && ViewBag.UserId == null || ViewBag.UserId.ToString() == UserManager.GetUserId(User))
         {
             <form asp-action="Post" method="post" class="mb-5">
                 <div class="form-group">
@@ -67,13 +65,13 @@
             </form>
         }
 
-        @if (ViewData["error"] != null)
+        @if (ViewBag.Error != null)
         {
-            <div class="alert alert-danger" role="alert">@ViewData["error"]</div>
+            <div class="alert alert-danger" role="alert">@ViewBag.Error</div>
         }
         else
         {
-            foreach(var post in (List<GetPostDto>)ViewData["posts"])
+            foreach(var post in (List<GetPostDto>)ViewBag.Posts)
             {
                 <div class="post">
                     <div class="post-title">

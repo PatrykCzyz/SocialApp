@@ -26,15 +26,17 @@ namespace TwitterMvc.Controllers
             CustomUser user = userId != null ? await _userManager.FindByIdAsync(userId) : await _userManager.GetUserAsync(User);
             var profile = new ProfileDto(user);
 
-            ViewData["userId"] = user.Id;
+            ViewBag.UserId = user.Id;
+            ViewBag.Avatar = $"/img/{profile.Gender}.png";
+                
             var posts = await _postService.GetPosts(user.Id);
             if (posts.Error != null)
             {
-                ViewData["error"] = posts.Error;
+                ViewBag.Error = posts.Error;
             }
             else
             {
-                ViewData["posts"] = posts.Result;
+                ViewBag.Posts = posts.Result;
             }
 
             return View(profile);

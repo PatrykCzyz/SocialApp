@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace TwitterMvc.Tests
 {
-    public class Post_Service_Tests
+    public class PostServiceTests
     {
         private AppDbContext _context;
         private PostService _postService;
@@ -96,10 +96,10 @@ namespace TwitterMvc.Tests
             await _context.SaveChangesAsync();
 
             //Act
-            var result = await _postService.GetPosts(userId);
+            var postsActual = await _postService.GetPosts(userId);
 
             //Assert
-            Assert.AreEqual(posts.Count, result.Count);
+            Assert.AreEqual(posts.Count, postsActual.Result.Count);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace TwitterMvc.Tests
             await _context.SaveChangesAsync();
 
             //Act
-            var postActual = (await _postService.GetPosts(userId)).First();
+            var postActual = (await _postService.GetPosts(userId)).Result.First();
 
             //Assert
             Assert.AreEqual(postExpected.Title, postActual.Title);
@@ -152,6 +152,20 @@ namespace TwitterMvc.Tests
             //Assert
             Assert.NotNull(posts.Error);
             Assert.Equals(posts.Error, "User doesn't exist.");
+        }
+
+        [Test]
+        public async Task GetPosts_Return_Error_When_User_Dont_Have_Posts()
+        {
+            //Arrange
+            
+            //Act
+            var posts = await _postService.GetPosts(userId);
+            
+            //Assert
+            Assert.Null(posts.Result);
+            Assert.NotNull(posts.Error);
+            Assert.AreEqual("You don't have any posts yet.",posts.Error);
         }
         #endregion
     }

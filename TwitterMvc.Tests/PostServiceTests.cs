@@ -7,13 +7,15 @@ using TwitterMvc.Enums;
 using System.Collections.Generic;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace TwitterMvc.Tests
 {
     public class Post_Service_Tests
     {
         private AppDbContext _context;
-        private string userId = Guid.NewGuid().ToString();
+        private PostService _postService;
+        private string userId = "1cd5f732-3a43-446b-978d-070bbd007a7d";
 
         [SetUp]
         public void Setup()
@@ -36,6 +38,9 @@ namespace TwitterMvc.Tests
             });
 
             _context.SaveChanges();
+
+
+            _postService = new PostService(_context);
         }
 
         [TearDown]
@@ -44,8 +49,9 @@ namespace TwitterMvc.Tests
             _context.Database.EnsureDeleted();
         }
 
+        #region GetPosts
         [Test]
-        public async Task Return_All_Users_Posts()
+        public async Task GetPosts_Return_All_Users_Posts()
         {
             //Arrange
             var posts = new List<Post>();
@@ -90,12 +96,63 @@ namespace TwitterMvc.Tests
             await _context.SaveChangesAsync();
 
             //Act
-            var postService = new PostService(_context);
-
-            var result = await postService.GetPosts(userId);
+            var result = await _postService.GetPosts(userId);
 
             //Assert
             Assert.AreEqual(posts.Count, result.Count);
         }
+
+        [Test]
+        public async Task GetPosts_Return_Post_Data_Correctly()
+        {
+            //Arrange
+            var postExpected = new Post
+            {
+                Id = 3,
+                Title = "My Post",
+                Content = "Content of my post.",
+                DateTime = DateTime.Now,
+                UserId = userId
+            };
+
+            await _context.AddAsync(postExpected);
+            await _context.SaveChangesAsync();
+
+            //Act
+            var postActual = (await _postService.GetPosts(userId)).First();
+
+            //Assert
+            Assert.AreEqual(postExpected.Title, postActual.Title);
+            Assert.AreEqual(postExpected.Content, postActual.Content);
+            Assert.AreEqual(postExpected.DateTime, postActual.DateTime);
+        }
+
+        [Test]
+        public async Task GetPosts_Return_Error_When_User_Wasnt_Provide()
+        {
+            //Arrange
+
+            //Act
+            var posts = await _postService.GetPosts(null);
+
+            //Arrange
+            Assert.NotNull(posts.Error);
+            Assert.Equals(posts.Error, "User doesn't exist.");
+        }
+
+        [Test]
+        public async Task GetPosts_Return_Error_When_User_Doesnt_Exist()
+        {
+            //Arrange
+            var id = "7dd0e8d2-2059-4fa3-9ed9-d1968c872e0b";
+
+            //Act
+            var posts = await _postService.GetPosts(id);
+
+            //Assert
+            Assert.NotNull(posts.Error);
+            Assert.Equals(posts.Error, "User doesn't exist.");
+        }
+        #endregion
     }
 }

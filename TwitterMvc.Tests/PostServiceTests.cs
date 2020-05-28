@@ -137,7 +137,7 @@ namespace TwitterMvc.Tests
 
             //Arrange
             Assert.NotNull(posts.Error);
-            Assert.Equals(posts.Error, "User doesn't exist.");
+            Assert.AreEqual(posts.Error, "User doesn't exist.");
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace TwitterMvc.Tests
 
             //Assert
             Assert.NotNull(posts.Error);
-            Assert.Equals(posts.Error, "User doesn't exist.");
+            Assert.AreEqual(posts.Error, "User doesn't exist.");
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace TwitterMvc.Tests
             //Assert
             Assert.Null(posts.Result);
             Assert.NotNull(posts.Error);
-            Assert.AreEqual("You don't have any posts yet.",posts.Error);
+            Assert.AreEqual("You don't have any posts yet!",posts.Error);
         }
         #endregion
     }

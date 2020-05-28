@@ -67,19 +67,26 @@
             </form>
         }
 
-        @foreach(var post in (List<GetPostDto>)ViewData["posts"])
+        @if (ViewData["error"] != null)
         {
-            <div class="post">
-                <div class="post-title">
-                    @post.Title
+            <div class="alert alert-danger" role="alert">@ViewData["error"]</div>
+        }
+        else
+        {
+            foreach(var post in (List<GetPostDto>)ViewData["posts"])
+            {
+                <div class="post">
+                    <div class="post-title">
+                        @post.Title
+                    </div>
+                    <div class="post-text">
+                        @post.Content
+                    </div>
+                    <div class="post-date">
+                        @post.DateTime
+                    </div>
                 </div>
-                <div class="post-text">
-                    @post.Content
-                </div>
-                <div class="post-date">
-                    @post.DateTime
-                </div>
-            </div>
+            } 
         }
     </div>
 </div>

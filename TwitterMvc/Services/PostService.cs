@@ -47,7 +47,7 @@ namespace TwitterMvc.Services
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
             if (data.Count == 0)
             {
-                returnValues.Error = "You don't have any posts yet!";
+                returnValues.Error = "There is no post yet!";
                 return returnValues;
             }
 

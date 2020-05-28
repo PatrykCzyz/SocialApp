@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
@@ -19,6 +20,7 @@ namespace TwitterMvc.Tests
         private AppDbContext _context;
         private PostService _postService;
         private string userId = "1cd5f732-3a43-446b-978d-070bbd007a7d";
+        private string wrongUserId = "7dd0e8d2-2059-4fa3-9ed9-d1968c872e0b";
 
         [SetUp]
         public void Setup()
@@ -53,6 +55,7 @@ namespace TwitterMvc.Tests
         }
 
         #region GetPosts
+        
         [Test]
         public async Task GetPosts_Return_All_Users_Posts()
         {
@@ -149,10 +152,9 @@ namespace TwitterMvc.Tests
         public async Task GetPosts_Return_Error_When_User_Doesnt_Exist()
         {
             //Arrange
-            var id = "7dd0e8d2-2059-4fa3-9ed9-d1968c872e0b";
-
+            
             //Act
-            var result = await _postService.GetPosts(id);
+            var result = await _postService.GetPosts(wrongUserId);
 
             //Assert
             Assert.False(result.Succeeded);
@@ -171,29 +173,125 @@ namespace TwitterMvc.Tests
             Assert.False(result.Succeeded);
             Assert.AreEqual("There is no post yet!",result.ErrorMessage);
         }
+        
         #endregion
 
         #region CreatePost
 
-        // public async Task CreatePost_Should_Create_Correctly()
-        // {
-        //     // Arrange
-        //     var postDto = new PostDto
-        //     {
-        //         Title = "First post",
-        //         Content = "Test post content."
-        //     };
-        //     
-        //     //Act
-        //     var result = await _postService.CreatePost(userId, postDto);
-        //
-        //     // Assert
-        //     var xd = new ReturnValues<ActionResult>();
-        //     
-        //     xd.Result.
-        //
-        // }
+        [Test]
+        public async Task CreatePost_Should_Create_Correctly()
+        {
+            // Arrange
+            var postDto = new PostDto
+            {
+                Title = "First post",
+                Content = "Test post content."
+            };
+            
+            // Act
+            var result = await _postService.CreatePost(userId, postDto);
+            var actualPost = await _context.Posts.ToListAsync();
+        
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(1, actualPost.Count);
+            Assert.AreEqual(postDto.Title, actualPost.First().Title);
+            Assert.AreEqual(postDto.Content, actualPost.First().Content);
+            Assert.AreEqual(userId, actualPost.First().UserId);
+        }
 
+        [Test]
+        public async Task CreatePost_Should_Return_Error_When_User_Doesnt_Exist()
+        {
+            // Arrange
+            var postDto = new PostDto
+            {
+                Title = "My frist post",
+                Content = "Content of my first post."
+            };
+
+            // Act
+            var result = await _postService.CreatePost(wrongUserId, postDto);
+            var posts = await _context.Posts.ToListAsync();
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(0, posts.Count);
+        }
+
+        [Test]
+        public async Task CreatePost_Should_Return_Error_When_User_Is_Null()
+        {
+            // Arrange
+            var postDto = new PostDto
+            {
+                Title = "My first post",
+                Content = "Content of my first post"
+            };
+            // Act
+            var result = await _postService.CreatePost(null, postDto);
+            var posts = await _context.Posts.ToListAsync();
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
+        }
+        
+        [Test]
+        public async Task CreatePost_Should_Return_Error_When_Title_Is_Null()
+        {
+            // Arrange
+            var postDto = new PostDto
+            {
+                Title = null,
+                Content = "Content of my first post."
+            };
+            
+            // Act
+            var result = await _postService.CreatePost(userId, postDto);
+            var posts = await _context.Posts.ToListAsync();
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(0, posts.Count);
+        }
+
+        [Test]
+        public async Task CreatePost_Should_Return_Error_When_Content_Is_Null()
+        {
+            // Arrange
+            var postDto = new PostDto
+            {
+                Title = "My first post",
+                Content = null
+            };
+
+            // Act
+            var result = await _postService.CreatePost(userId, postDto);
+            var posts = await _context.Posts.ToListAsync();
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(0, posts.Count);
+        }
+
+        [Test]
+        public async Task CreatePost_Should_Return_Error_When_PostDto_Is_Null()
+        {
+            // Arrange
+            
+            // Act
+            var result = await _postService.CreatePost(userId, null);
+            var posts = await _context.Posts.ToListAsync();
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("You have to fill all fields.", result.ErrorMessage);
+            Assert.AreEqual(0, posts.Count);
+        }
+        
         #endregion
     }
 }

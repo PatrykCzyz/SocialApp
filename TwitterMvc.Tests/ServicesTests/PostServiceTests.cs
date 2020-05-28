@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using TwitterMvc.Dtos;
+using TwitterMvc.Helpers;
 
 namespace TwitterMvc.Tests
 {
@@ -54,52 +57,51 @@ namespace TwitterMvc.Tests
         public async Task GetPosts_Return_All_Users_Posts()
         {
             //Arrange
-            var posts = new List<Post>();
-
-            posts.Add(new Post
+            var posts = new List<Post>
             {
-                Id = 5,
-                Title = "First post",
-                Content = "Test content for my first post.",
-                DateTime = DateTime.Now,
-                UserId = userId
-            });
-
-            posts.Add(new Post
-            {
-                Id = 8,
-                Title = "Second post",
-                Content = "Test content for my second post.",
-                DateTime = DateTime.Now,
-                UserId = userId
-            });
-
-            posts.Add(new Post
-            {
-                Id = 12,
-                Title = "Third post",
-                Content = "Test content for my third post.",
-                DateTime = DateTime.Now,
-                UserId = userId
-            });
-
-            posts.Add(new Post
-            {
-                Id = 16,
-                Title = "Fourth post",
-                Content = "Test content for my fourth post.",
-                DateTime = DateTime.Now,
-                UserId = userId
-            });
+                new Post
+                {
+                    Id = 5,
+                    Title = "First post",
+                    Content = "Test content for my first post.",
+                    DateTime = DateTime.Now,
+                    UserId = userId
+                },
+                new Post
+                {
+                    Id = 8,
+                    Title = "Second post",
+                    Content = "Test content for my second post.",
+                    DateTime = DateTime.Now,
+                    UserId = userId
+                },
+                new Post
+                {
+                    Id = 12,
+                    Title = "Third post",
+                    Content = "Test content for my third post.",
+                    DateTime = DateTime.Now,
+                    UserId = userId
+                },
+                new Post
+                {
+                    Id = 16,
+                    Title = "Fourth post",
+                    Content = "Test content for my fourth post.",
+                    DateTime = DateTime.Now,
+                    UserId = userId
+                }
+            };
 
             await _context.AddRangeAsync(posts);
             await _context.SaveChangesAsync();
 
             //Act
-            var postsActual = await _postService.GetPosts(userId);
+            var result = await _postService.GetPosts(userId);
 
             //Assert
-            Assert.AreEqual(posts.Count, postsActual.Result.Count);
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(posts.Count, result.Content.Count);
         }
 
         [Test]
@@ -119,7 +121,10 @@ namespace TwitterMvc.Tests
             await _context.SaveChangesAsync();
 
             //Act
-            var postActual = (await _postService.GetPosts(userId)).Result.First();
+            var result = await _postService.GetPosts(userId);
+            Assert.True(result.Succeeded); // Assert
+            
+            var postActual = result.Content.FirstOrDefault();
 
             //Assert
             Assert.AreEqual(postExpected.Title, postActual.Title);
@@ -133,11 +138,11 @@ namespace TwitterMvc.Tests
             //Arrange
 
             //Act
-            var posts = await _postService.GetPosts(null);
+            var result = await _postService.GetPosts(null);
 
             //Arrange
-            Assert.NotNull(posts.Error);
-            Assert.AreEqual(posts.Error, "User doesn't exist.");
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
         }
 
         [Test]
@@ -147,11 +152,11 @@ namespace TwitterMvc.Tests
             var id = "7dd0e8d2-2059-4fa3-9ed9-d1968c872e0b";
 
             //Act
-            var posts = await _postService.GetPosts(id);
+            var result = await _postService.GetPosts(id);
 
             //Assert
-            Assert.NotNull(posts.Error);
-            Assert.AreEqual(posts.Error, "User doesn't exist.");
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("User doesn't exist.", result.ErrorMessage);
         }
 
         [Test]
@@ -160,13 +165,35 @@ namespace TwitterMvc.Tests
             //Arrange
             
             //Act
-            var posts = await _postService.GetPosts(userId);
+            var result = await _postService.GetPosts(userId);
             
             //Assert
-            Assert.Null(posts.Result);
-            Assert.NotNull(posts.Error);
-            Assert.AreEqual("There is no post yet!",posts.Error);
+            Assert.False(result.Succeeded);
+            Assert.AreEqual("There is no post yet!",result.ErrorMessage);
         }
+        #endregion
+
+        #region CreatePost
+
+        // public async Task CreatePost_Should_Create_Correctly()
+        // {
+        //     // Arrange
+        //     var postDto = new PostDto
+        //     {
+        //         Title = "First post",
+        //         Content = "Test post content."
+        //     };
+        //     
+        //     //Act
+        //     var result = await _postService.CreatePost(userId, postDto);
+        //
+        //     // Assert
+        //     var xd = new ReturnValues<ActionResult>();
+        //     
+        //     xd.Result.
+        //
+        // }
+
         #endregion
     }
 }

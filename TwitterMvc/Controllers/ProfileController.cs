@@ -29,14 +29,14 @@ namespace TwitterMvc.Controllers
             ViewBag.UserId = user.Id;
             ViewBag.Avatar = $"/img/{profile.Gender}.png";
                 
-            var posts = await _postService.GetPosts(user.Id);
-            if (posts.Error != null)
+            var result = await _postService.GetPosts(user.Id);
+            if (result.Succeeded)
             {
-                ViewBag.Error = posts.Error;
+                ViewBag.Posts = result.Content;
             }
             else
             {
-                ViewBag.Posts = posts.Result;
+                ViewBag.Error = result.ErrorMessage;
             }
 
             return View(profile);

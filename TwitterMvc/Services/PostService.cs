@@ -35,25 +35,21 @@ namespace TwitterMvc.Services
 
         public async Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId)
         {
-            var returnValues = new ReturnValues<List<GetPostDto>>();
-
             var userExist = await _context.Users.AnyAsync(x => x.Id == userId);
             if (userId == null || !userExist)
             {
-                returnValues.Error = "User doesn't exist.";
-                return returnValues;
+                return new ReturnValues<List<GetPostDto>>("User doesn't exist.");
             }
             
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
             if (data.Count == 0)
             {
-                returnValues.Error = "There is no post yet!";
-                return returnValues;
+                return new ReturnValues<List<GetPostDto>>("There is no post yet!");
             }
 
-            returnValues.Result = data.Select(post => new GetPostDto(post)).ToList();
-
-            return returnValues;
+            var result= data.Select(post => new GetPostDto(post)).ToList();
+            
+            return new ReturnValues<List<GetPostDto>>(result);
         }
 
         public Task RemovePost(int postId)

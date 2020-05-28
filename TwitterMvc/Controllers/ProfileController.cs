@@ -20,22 +20,10 @@ namespace TwitterMvc.Controllers
             _postService = postService;
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var profile = new ProfileDto(user);
-
-            ViewData["posts"] = (await _postService.GetPosts(user.Id)).Result;
-
-            return View(profile);
-        }
-
-        [HttpGet("{userId}")]
         public async Task<IActionResult> Index(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            CustomUser user = userId != null ? await _userManager.FindByIdAsync(userId) : await _userManager.GetUserAsync(User);
             var profile = new ProfileDto(user);
 
             ViewData["userId"] = user.Id;

@@ -32,7 +32,7 @@ namespace TwitterMvc.Services
             return new ReturnValues<bool>(true);
         }
 
-        public Task<ReturnValues<bool>> EditPost(int postId, PostDto postDto)
+        public Task<ReturnValues<bool>> EditPost(string userId, int postId, PostDto postDto)
         {
             throw new NotImplementedException();
         }
@@ -56,7 +56,7 @@ namespace TwitterMvc.Services
             return new ReturnValues<List<GetPostDto>>(result);
         }
 
-        public Task<ReturnValues<bool>> RemovePost(int postId)
+        public Task<ReturnValues<bool>> RemovePost(string userId, int postId)
         {
             throw new NotImplementedException();
         }

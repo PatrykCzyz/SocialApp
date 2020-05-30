@@ -144,11 +144,7 @@ namespace TwitterMvc.Tests
         public async Task CreatePost_Should_Create_Correctly()
         {
             // Arrange
-            var postDto = new PostDto
-            {
-                Title = "First post",
-                Content = "Test post content."
-            };
+            var postDto = _fakeData.GetPostDto();
             
             // Act
             var result = await _postService.CreatePost(_userId, postDto);
@@ -166,11 +162,7 @@ namespace TwitterMvc.Tests
         public async Task CreatePost_Should_Return_Error_When_User_Doesnt_Exist()
         {
             // Arrange
-            var postDto = new PostDto
-            {
-                Title = "My frist post",
-                Content = "Content of my first post."
-            };
+            var postDto = _fakeData.GetPostDto();
         
             // Act
             var result = await _postService.CreatePost(_wrongUserId, postDto);
@@ -185,11 +177,8 @@ namespace TwitterMvc.Tests
         public async Task CreatePost_Should_Return_Error_When_User_Is_Null()
         {
             // Arrange
-            var postDto = new PostDto
-            {
-                Title = "My first post",
-                Content = "Content of my first post"
-            };
+            var postDto = _fakeData.GetPostDto();
+            
             // Act
             var result = await _postService.CreatePost(null, postDto);
             var posts = await _context.Posts.ToListAsync();
@@ -203,11 +192,7 @@ namespace TwitterMvc.Tests
         public async Task CreatePost_Should_Return_Error_When_Title_Is_Null()
         {
             // Arrange
-            var postDto = new PostDto
-            {
-                Title = null,
-                Content = "Content of my first post."
-            };
+            var postDto = _fakeData.GetPostDto();
             
             // Act
             var result = await _postService.CreatePost(_userId, postDto);
@@ -223,11 +208,7 @@ namespace TwitterMvc.Tests
         public async Task CreatePost_Should_Return_Error_When_Content_Is_Null()
         {
             // Arrange
-            var postDto = new PostDto
-            {
-                Title = "My first post",
-                Content = null
-            };
+            var postDto = _fakeData.GetPostDto();
         
             // Act
             var result = await _postService.CreatePost(_userId, postDto);
@@ -324,94 +305,152 @@ namespace TwitterMvc.Tests
         #region EditPost
 
         [Test]
-        public void EditPost_Should_Edit_Post_Correctly()
+        public async Task EditPost_Should_Edit_Post_Correctly()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
 
             // Act
+            var result = await _postService.EditPost(_userId, post.Id, newPostData);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(newPostData.Title, actualPost.Title);
+            Assert.AreEqual(newPostData.Content, actualPost.Content);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_Title_Is_Null()
+        public async Task EditPost_Should_Return_Error_When_Title_Is_Null()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
+            newPostData.Title = null;
 
             // Act
+            var result = await _postService.EditPost(_userId, post.Id, newPostData);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreNotEqual(newPostData.Title, actualPost.Title);
+            Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_Content_Is_Null()
+        public async Task EditPost_Should_Return_Error_When_Content_Is_Null()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
+            newPostData.Content = null;
 
             // Act
+            var result = await _postService.EditPost(_userId, post.Id, newPostData);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreNotEqual(newPostData.Title, actualPost.Title);
+            Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_Given_PostDto_Is_Null()
+        public async Task EditPost_Should_Return_Error_When_Given_PostDto_Is_Null()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
 
             // Act
+            var result = await _postService.EditPost(_userId, post.Id, null);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_User_Doesnt_Exist()
+        public async Task EditPost_Should_Return_Error_When_UserId_Doesnt_Exist()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
 
             // Act
+            var result = await _postService.EditPost(_wrongUserId, post.Id, newPostData);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreNotEqual(newPostData.Title, actualPost.Title);
+            Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_User_Is_Null()
+        public async Task EditPost_Should_Return_Error_When_UserId_Is_Null()
         {
             // Arrange
-            
+            var post = _fakeData.GetPosts(_userId, 1).First();
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
 
             // Act
+            var result = await _postService.EditPost(null, post.Id, newPostData);
 
+            var actualPost = await _context.Posts.FirstOrDefaultAsync(x => x.Id == post.Id);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreNotEqual(newPostData.Title, actualPost.Title);
+            Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
 
         [Test]
-        public void EditPost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
+        public async Task EditPost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
         {
             // Arrange
-            
+            var differentUser = _fakeData.GetUser();
+            var post = _fakeData.GetPosts(differentUser.Id, 1).First();
+            await _context.AddAsync(differentUser);
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            var newPostData = _fakeData.GetPostDto();
 
             // Act
-
+            var result = await _postService.EditPost(_userId, post.Id, newPostData);
 
             // Assert
-    
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("EditPostFailed"), result.ErrorMessage);
         }
         
         #endregion

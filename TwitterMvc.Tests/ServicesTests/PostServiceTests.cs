@@ -57,8 +57,13 @@ namespace TwitterMvc.Tests
         {
             //Arrange
             var posts = _fakeData.GetPosts(_userId, 5);
+
+            var differentUser = _fakeData.GetUser();
+            var differentPosts = _fakeData.GetPosts(differentUser.Id, 3);
             
             await _context.AddRangeAsync(posts);
+            await _context.AddAsync(differentUser);
+            await _context.AddRangeAsync(differentPosts);
             await _context.SaveChangesAsync();
 
             //Act

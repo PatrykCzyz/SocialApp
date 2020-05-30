@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
 
 namespace TwitterMvc.Helpers
 {
@@ -16,6 +12,8 @@ namespace TwitterMvc.Helpers
             errorList.Add("UserDosentExist", "User doesn't exist.");
             errorList.Add("NoPost", "There is no post yet!");
             errorList.Add("PostDtoNotFilled", "You have to fill all fields.");
+            errorList.Add("RemovePostFailed", "You can't remove this post.");
+            errorList.Add("EditPostFailed", "You can't edit this post.");
         }
         public string GetError(string errorKey)
         {

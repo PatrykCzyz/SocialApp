@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bogus;
+using TwitterMvc.Dtos;
 using TwitterMvc.Enums;
 using TwitterMvc.Models;
 
@@ -33,6 +34,15 @@ namespace TwitterMvc.Tests.Helpers
                 .RuleFor(o => o.UserId, f => userId);
 
             return postFaker.Generate(count);
+        }
+
+        public PostDto GetPostDto()
+        {
+            var postDtoFaker = new Faker<PostDto>()
+                .RuleFor(o => o.Title, f => f.Lorem.Sentence())
+                .RuleFor(o => o.Content, f => f.Lorem.Letter(140));
+
+            return postDtoFaker.Generate();
         }
     }
 }

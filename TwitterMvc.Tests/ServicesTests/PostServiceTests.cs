@@ -282,9 +282,40 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
-        public void RemovePost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
+        public async Task RemovePost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
         {
+            // Arrange
+            var differentUser = _fakeData.GetUser();
+            var post = _fakeData.GetPosts(differentUser.Id, 1).First();
+            await _context.AddAsync(differentUser);
+            await _context.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _postService.RemovePost(_userId, post.Id);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("RemovePostFailed"), result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task RemovePost_Should_Return_Error_When_User_Doesnt_Exist()
+        {
+            // Arrange
+            var post = _fakeData.GetPosts(_userId, 1);
+            await _context.AddRangeAsync(post);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _postService.RemovePost(_wrongUserId, post.First().Id);
             
+            var actualPostCount = (await _context.Posts.ToListAsync()).Count;
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(post.Count, actualPostCount);
         }
         
         #endregion

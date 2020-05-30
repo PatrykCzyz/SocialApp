@@ -5,6 +5,7 @@ using TwitterMvc.Models;
 using System;
 using TwitterMvc.Enums;
 using System.Collections.Generic;
+using System.Globalization;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
 using System.Linq;
@@ -316,6 +317,101 @@ namespace TwitterMvc.Tests
             Assert.False(result.Succeeded);
             Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
             Assert.AreEqual(post.Count, actualPostCount);
+        }
+        
+        #endregion
+
+        #region EditPost
+
+        [Test]
+        public void EditPost_Should_Edit_Post_Correctly()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_Title_Is_Null()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_Content_Is_Null()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_Given_PostDto_Is_Null()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_User_Doesnt_Exist()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_User_Is_Null()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
+        }
+
+        [Test]
+        public void EditPost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+    
         }
         
         #endregion

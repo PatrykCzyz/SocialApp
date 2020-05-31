@@ -15,6 +15,7 @@ using TwitterMvc.Helpers;
 using TwitterMvc.Models;
 using TwitterMvc.Services;
 using TwitterMvc.Services.Interfaces;
+using AutoMapper;
 
 namespace TwitterMvc
 {
@@ -47,8 +48,9 @@ namespace TwitterMvc
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IPostService, PostService>();
-
             services.AddScoped<IErrorService, ErrorService>();
+            
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

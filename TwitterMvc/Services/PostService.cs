@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
@@ -15,16 +16,20 @@ namespace TwitterMvc.Services
     {
         private readonly AppDbContext _context;
         private readonly IErrorService _errorService;
+        private readonly IMapper _mapper;
 
-        public PostService(AppDbContext context, IErrorService errorService)
+        public PostService(AppDbContext context, IErrorService errorService, IMapper mapper)
         {
             _context = context;
             _errorService = errorService;
+            _mapper = mapper;
         }
 
         public async Task<ReturnValues<bool>> CreatePost(string userId, PostDto postDto)
         {
-            var post = new Post(userId, postDto);
+            var post = _mapper.Map<Post>(postDto);
+            post.UserId = userId;
+            post.DateTime = DateTime.Now;
 
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
@@ -51,7 +56,7 @@ namespace TwitterMvc.Services
                 return new ReturnValues<List<GetPostDto>>(_errorService.GetError("NoPost"));
             }
 
-            var result= data.Select(post => new GetPostDto(post)).ToList();
+            var result = _mapper.Map<List<Post>, List<GetPostDto>>(data);
             
             return new ReturnValues<List<GetPostDto>>(result);
         }

@@ -42,12 +42,6 @@ namespace TwitterMvc.Services
         }
 
         #region CreatePostMethods
-
-        private async Task<bool> IsUserExist(string userId)
-        {
-            var userExist = await _context.CustomUsers.AnyAsync(x => x.Id == userId);
-            return userExist;
-        }
         
         private static bool IsPostDtoValid(PostDto postDto)
         {
@@ -71,17 +65,12 @@ namespace TwitterMvc.Services
 
         public async Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId)
         {
-            var userExist = await _context.Users.AnyAsync(x => x.Id == userId);
-            if (userId == null || !userExist)
-            {
+            if (!await IsUserExist(userId))
                 return new ReturnValues<List<GetPostDto>>(_errorService.GetError("UserDosentExist"));
-            }
             
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
             if (data.Count == 0)
-            {
                 return new ReturnValues<List<GetPostDto>>(_errorService.GetError("NoPost"));
-            }
 
             var result = _mapper.Map<List<Post>, List<GetPostDto>>(data);
             
@@ -92,5 +81,15 @@ namespace TwitterMvc.Services
         {
             throw new NotImplementedException();
         }
+
+        #region Methods
+
+        private async Task<bool> IsUserExist(string userId)
+        {
+            var userExist = await _context.CustomUsers.AnyAsync(x => x.Id == userId);
+            return userExist;
+        }
+
+        #endregion
     }
 }

@@ -60,6 +60,7 @@ namespace TwitterMvc.Tests
         #region GetPosts
         
         [Test]
+        [Category("GetPosts")]
         public async Task GetPosts_Return_All_Posts_For_Given_UserId()
         {
             //Arrange
@@ -82,6 +83,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("GetPosts")]
         public async Task GetPosts_Return_Post_Data_Correctly()
         {
             //Arrange
@@ -104,6 +106,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("GetPosts")]
         public async Task GetPosts_Return_Error_When_User_Wasnot_Provide()
         {
             //Arrange
@@ -117,6 +120,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("GetPosts")]
         public async Task GetPosts_Return_Error_When_User_Doesnt_Exist()
         {
             //Arrange
@@ -130,6 +134,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("GetPosts")]
         public async Task GetPosts_Return_Error_When_User_Dont_Have_Posts()
         {
             //Arrange
@@ -147,6 +152,7 @@ namespace TwitterMvc.Tests
         #region CreatePost
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Create_Correctly()
         {
             // Arrange
@@ -165,6 +171,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Return_Error_When_User_Doesnt_Exist()
         {
             // Arrange
@@ -181,6 +188,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Return_Error_When_User_Is_Null()
         {
             // Arrange
@@ -196,6 +204,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Return_Error_When_Title_Is_Null()
         {
             // Arrange
@@ -213,6 +222,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Return_Error_When_Content_Is_Null()
         {
             // Arrange
@@ -230,6 +240,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("CreatePost")]
         public async Task CreatePost_Should_Return_Error_When_PostDto_Is_Null()
         {
             // Arrange
@@ -249,6 +260,7 @@ namespace TwitterMvc.Tests
         #region RemovePost
         
         [Test]
+        [Category("RemovePost")]
         public async Task RemovePost_Should_Remove_Post_Correctly()
         {
             // Arrange
@@ -273,6 +285,7 @@ namespace TwitterMvc.Tests
         }
         
         [Test]
+        [Category("RemovePost")]
         public async Task RemovePost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
         {
             // Arrange
@@ -291,6 +304,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("RemovePost")]
         public async Task RemovePost_Should_Return_Error_When_User_Doesnt_Exist()
         {
             // Arrange
@@ -314,6 +328,7 @@ namespace TwitterMvc.Tests
         #region EditPost
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Edit_Post_Correctly()
         {
             // Arrange
@@ -335,6 +350,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_Title_Is_Null()
         {
             // Arrange
@@ -358,6 +374,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_Content_Is_Null()
         {
             // Arrange
@@ -381,6 +398,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_Given_PostDto_Is_Null()
         {
             // Arrange
@@ -399,6 +417,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_UserId_Doesnt_Exist()
         {
             // Arrange
@@ -421,6 +440,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_UserId_Is_Null()
         {
             // Arrange
@@ -443,6 +463,7 @@ namespace TwitterMvc.Tests
         }
 
         [Test]
+        [Category("EditPost")]
         public async Task EditPost_Should_Return_Error_When_User_Dont_Have_Post_With_Given_Id()
         {
             // Arrange

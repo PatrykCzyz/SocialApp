@@ -27,15 +27,42 @@ namespace TwitterMvc.Services
 
         public async Task<ReturnValues<bool>> CreatePost(string userId, PostDto postDto)
         {
-            var post = _mapper.Map<Post>(postDto);
-            post.UserId = userId;
-            post.DateTime = DateTime.Now;
+            if (!await IsUserExist(userId))
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+            
+            if (!IsPostDtoValid(postDto))
+                return new ReturnValues<bool>(_errorService.GetError("PostDtoNotFilled"));
+            
+            var post = GetEntityPost(userId, postDto);
 
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
 
             return new ReturnValues<bool>(true);
         }
+
+        #region CreatePostMethods
+
+        private async Task<bool> IsUserExist(string userId)
+        {
+            var userExist = await _context.CustomUsers.AnyAsync(x => x.Id == userId);
+            return userExist;
+        }
+        
+        private static bool IsPostDtoValid(PostDto postDto)
+        {
+            return postDto != null && postDto.Title != null && postDto.Content != null;
+        }
+        
+        private Post GetEntityPost(string userId, PostDto postDto)
+        {
+            var post = _mapper.Map<Post>(postDto);
+            post.UserId = userId;
+            post.DateTime = DateTime.Now;
+            return post;
+        }
+
+        #endregion
 
         public Task<ReturnValues<bool>> EditPost(string userId, int postId, PostDto postDto)
         {

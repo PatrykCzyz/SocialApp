@@ -9,9 +9,11 @@ using System.Globalization;
 using TwitterMvc.Services;
 using System.Threading.Tasks;
 using System.Linq;
+using AutoMapper;
 using Bogus;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
+using TwitterMvc.Helpers.AutoMapper;
 using TwitterMvc.Services.Interfaces;
 using TwitterMvc.Tests.Helpers;
 
@@ -32,9 +34,13 @@ namespace TwitterMvc.Tests
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "SocialAppTestDb").Options;
 
+            var myProfile = new AutoMapping();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+            var mapper = new Mapper(configuration);
+            
             _context = new AppDbContext(options);
             _errorService = new ErrorService();
-            _postService = new PostService(_context, _errorService);
+            _postService = new PostService(_context, _errorService, mapper);
             _fakeData = new FakeDataGenerator();
 
             var user = _fakeData.GetUser();
@@ -170,6 +176,7 @@ namespace TwitterMvc.Tests
         
             // Assert
             Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         
@@ -193,6 +200,7 @@ namespace TwitterMvc.Tests
         {
             // Arrange
             var postDto = _fakeData.GetPostDto();
+            postDto.Title = null;
             
             // Act
             var result = await _postService.CreatePost(_userId, postDto);
@@ -209,6 +217,7 @@ namespace TwitterMvc.Tests
         {
             // Arrange
             var postDto = _fakeData.GetPostDto();
+            postDto.Content = null;
         
             // Act
             var result = await _postService.CreatePost(_userId, postDto);

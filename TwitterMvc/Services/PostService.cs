@@ -77,9 +77,19 @@ namespace TwitterMvc.Services
             return new ReturnValues<List<GetPostDto>>(result);
         }
 
-        public Task<ReturnValues<bool>> RemovePost(string userId, int postId)
+        public async Task<ReturnValues<bool>> RemovePost(string userId, int postId)
         {
-            throw new NotImplementedException();
+            if(!await IsUserExist(userId))
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == postId);
+            if(post == null)
+                return new ReturnValues<bool>(_errorService.GetError("RemovePostFailed"));
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return new ReturnValues<bool>(true);
         }
 
         #region Methods

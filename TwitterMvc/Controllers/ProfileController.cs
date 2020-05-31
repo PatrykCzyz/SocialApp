@@ -36,7 +36,7 @@ namespace TwitterMvc.Controllers
             }
             else
             {
-                ViewBag.Error = result.ErrorMessage;
+                TempData["Error"] = result.ErrorMessage;
             }
 
             return View(profile);
@@ -53,6 +53,21 @@ namespace TwitterMvc.Controllers
                 await _postService.CreatePost(userId, postDto);
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [Authorize]
+        [HttpPost("{postId}")]
+        public async Task<IActionResult> DeletePost(int postId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _postService.RemovePost(user.Id, postId);
+        
+            if (!result.Succeeded)
+            {
+                TempData["Error"] = result.ErrorMessage;
+            }
+            
             return RedirectToAction(nameof(Index));
         }
     }

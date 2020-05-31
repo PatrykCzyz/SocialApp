@@ -198,3 +198,13 @@ body {
     color: black;
     text-decoration-color: gray;
 }
+
+.dropdown {
+    float: right;
+}
+
+.dropdown button {
+    border: 0;
+    outline: 0;
+    background: 0;
+}

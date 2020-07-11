@@ -58,9 +58,27 @@ namespace TwitterMvc.Services
 
         #endregion
 
-        public Task<ReturnValues<bool>> EditPost(string userId, int postId, PostDto postDto)
+        public async Task<ReturnValues<bool>> EditPost(string userId, int postId, PostDto postDto)
         {
-            throw new NotImplementedException();
+            if (!await IsUserExist(userId))
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+
+            if (!IsPostDtoValid(postDto))
+                return new ReturnValues<bool>(_errorService.GetError("PostDtoNotFilled"));
+
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == userId);
+            if (post == null)
+                return new ReturnValues<bool>(_errorService.GetError("EditPostFailed"));
+
+            var newPost = GetEntityPost(userId, postDto);
+
+            post.Title = newPost.Title;
+            post.Content = newPost.Content;
+
+            _context.Update(newPost);
+            await _context.SaveChangesAsync();
+
+            return new ReturnValues<bool>(true);
         }
 
         public async Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId)

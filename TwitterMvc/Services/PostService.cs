@@ -70,12 +70,10 @@ namespace TwitterMvc.Services
             if (post == null)
                 return new ReturnValues<bool>(_errorService.GetError("EditPostFailed"));
 
-            var newPost = GetEntityPost(userId, postDto);
+            post.Title = postDto.Title;
+            post.Content = postDto.Content;
 
-            post.Title = newPost.Title;
-            post.Content = newPost.Content;
-
-            _context.Update(newPost);
+            _context.Update(post);
             await _context.SaveChangesAsync();
 
             return new ReturnValues<bool>(true);

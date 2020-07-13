@@ -13,6 +13,7 @@ namespace TwitterMvc.Helpers.AutoMapper
             CreateMap<Post, PostDto>();
             CreateMap<PostDto, Post>();
             CreateMap<Post, GetPostDto>();
+            CreateMap<GetPostDto, PostDto>();
         }
     }
 }

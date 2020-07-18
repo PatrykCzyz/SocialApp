@@ -181,7 +181,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
         [Test]
         [Category("UnFollow")]
-        public async Task Follow_Should_Return_Error_When_UserToUnFollow_Doesnt_Exist()
+        public async Task UnFollow_Should_Return_Error_When_UserToUnFollow_Doesnt_Exist()
         {
             // Arange
 
@@ -228,7 +228,7 @@ namespace TwitterMvc.Tests.ServicesTests
             // Arange
 
             // Act
-            var result = await _followService.Follow(null, _userId);
+            var result = await _followService.UnFollow(null, _userId);
 
             // Assert
             Assert.False(result.Succeeded);
@@ -245,11 +245,11 @@ namespace TwitterMvc.Tests.ServicesTests
             await _context.SaveChangesAsync();
 
             // Act
-            var result = await _followService.Follow(_userId, notFollowedUser.Id);
+            var result = await _followService.UnFollow(_userId, notFollowedUser.Id);
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserIsAlreadyFollowed"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError("UserIsNotFollowed"), result.ErrorMessage);
         }
         #endregion
 

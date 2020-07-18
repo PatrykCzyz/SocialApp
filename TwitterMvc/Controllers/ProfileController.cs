@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.UserDtos;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 

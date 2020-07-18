@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using System.Linq;
-using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.UserDtos;
 
 namespace TwitterMvc.Controllers
 {

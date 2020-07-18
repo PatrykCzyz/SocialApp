@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
-using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.UserDtos;
 using TwitterMvc.Helpers;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;

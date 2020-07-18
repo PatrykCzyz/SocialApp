@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.UserDtos;
 using TwitterMvc.Helpers;
 
 namespace TwitterMvc.Services.Interfaces

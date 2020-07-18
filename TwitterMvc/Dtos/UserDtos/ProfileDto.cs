@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using TwitterMvc.Enums;
 using TwitterMvc.Models;
 
-namespace TwitterMvc.Dtos
+namespace TwitterMvc.Dtos.UserDtos
 {
     public class ProfileDto
     {

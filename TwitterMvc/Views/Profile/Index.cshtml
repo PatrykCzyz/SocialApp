@@ -5,7 +5,7 @@
 @using TwitterMvc.Models;
 @using Microsoft.AspNetCore.Identity;
 
-@model TwitterMvc.Dtos.ProfileDto
+@model TwitterMvc.Dtos.UserDtos.ProfileDto
 @{
     var postDto = new PostDto();
     bool isOwnProfile = SignInManager.IsSignedIn(User) && ViewBag.UserId == null || ViewBag.UserId.ToString() == UserManager.GetUserId(User);

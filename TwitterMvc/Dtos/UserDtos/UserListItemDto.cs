@@ -5,9 +5,9 @@ using TwitterMvc.Models;
 
 namespace TwitterMvc.Dtos
 {
-    public class UserListItem
+    public class UserListItemDto
     {
-		public UserListItem(CustomUser user)
+		public UserListItemDto(CustomUser user)
 		{
 			Id = user.Id;
 			Username = user.UserName;

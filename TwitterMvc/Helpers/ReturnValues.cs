@@ -4,10 +4,14 @@ namespace TwitterMvc.Helpers
 {
     public class ReturnValues<T>
     {
+        public ReturnValues()
+        {
+            Succeeded = true;
+        }
+
         public ReturnValues(T content)
         {
             Succeeded = true;
-            ErrorMessage = null;
             Content = content;
         }
 

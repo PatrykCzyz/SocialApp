@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
+using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 
 namespace TwitterMvc.Services
@@ -22,24 +25,85 @@ namespace TwitterMvc.Services
             _mapper = mapper;
         }
 
-        public Task<ReturnValues<bool>> Follow(string userId, string userToFollowId)
+        public async Task<ReturnValues<bool>> Follow(string userId, string userToFollowId)
         {
-            throw new NotImplementedException();
+            if(!await UsersExists(userId, userToFollowId))
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+
+            if(await UserAlreadyFollowed(userId, userToFollowId))
+                return new ReturnValues<bool>(_errorService.GetError("UserIsAlreadyFollowed"));
+
+            await _context.AddAsync(new Follow(userId, userToFollowId));
+            await _context.SaveChangesAsync();
+
+            return new ReturnValues<bool>();
         }
 
-        public Task<ReturnValues<List<UserListItemDto>>> GetFollowers(string userId)
+        public async Task<ReturnValues<bool>> UnFollow(string userId, string userToUnFollowId)
         {
-            throw new NotImplementedException();
+            if (!await UsersExists(userId, userToUnFollowId))
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+
+            if (!await UserAlreadyFollowed(userId, userToUnFollowId))
+                return new ReturnValues<bool>(_errorService.GetError("UserIsNotFollowed"));
+
+            var follow = await _context.Follows.FirstAsync(x => x.UserId == userId && x.FollowUserId == userToUnFollowId);
+
+            _context.Remove(follow);
+            await _context.SaveChangesAsync();
+
+            return new ReturnValues<bool>();
         }
 
-        public Task<ReturnValues<List<UserListItemDto>>> GetFollowing(string userId)
+        public async Task<ReturnValues<List<UserListItemDto>>> GetFollowers(string userId)
         {
-            throw new NotImplementedException();
+            if (!await UserExist(userId))
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("UserDosentExist"));
+
+            var result = await _context.Follows.Where(x => x.FollowUserId == userId)
+                .Select(x => new UserListItemDto(x.User)).ToListAsync();
+
+            if (result.Count == 0)
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("DontHaveFollowers"));
+
+            return new ReturnValues<List<UserListItemDto>>(result);
         }
 
-        public Task<ReturnValues<bool>> UnFollow(string userId, string userToUnFollowId)
+        public async Task<ReturnValues<List<UserListItemDto>>> GetFollowing(string userId)
         {
-            throw new NotImplementedException();
+            if (!await UserExist(userId))
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("UserDosentExist"));
+
+            var result = await _context.Follows.Where(x => x.UserId == userId)
+                .Select(x => new UserListItemDto(x.User)).ToListAsync();
+
+            if (result.Count == 0)
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("DontHaveFollowing"));
+
+            return new ReturnValues<List<UserListItemDto>>(result);
         }
+
+        #region Methods
+        private async Task<bool> UsersExists(string userId, string secondUserId)
+        {
+            var usersExist = await _context.CustomUsers.Where(x => x.Id == userId || x.Id == secondUserId).CountAsync();
+            if (usersExist != 2)
+                return false;
+            return true;
+        }
+
+        private async Task<bool> UserAlreadyFollowed(string userId, string secondUserId)
+        {
+            var alreadyFollowed = await _context.Follows.AnyAsync(x => x.UserId == userId && x.FollowUserId == secondUserId);
+            if (alreadyFollowed)
+                return true;
+            return false;
+        }
+
+        private async Task<bool> UserExist(string userId)
+        {
+            return await _context.CustomUsers.AnyAsync(x => x.Id == userId);
+        }
+        #endregion
     }
 }

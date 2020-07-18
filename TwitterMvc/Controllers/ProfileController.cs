@@ -61,7 +61,7 @@ namespace TwitterMvc.Controllers
 
         [Authorize]
         [HttpPost("EditPost")]
-        public async Task<IActionResult> EditPost(GetPostDto post)
+        public IActionResult EditPost(GetPostDto post)
         {
             var postData = _mapper.Map<PostDto>(post);
             ViewBag.PostId = post.Id;

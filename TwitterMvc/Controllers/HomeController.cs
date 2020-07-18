@@ -20,7 +20,7 @@ namespace TwitterMvc.Controllers
         public async Task<IActionResult> Index()
         {
             var usersList = await _context.CustomUsers
-                .Select(x => new UserListItem(x))
+                .Select(x => new UserListItemDto(x))
                 .ToListAsync();
 
             return View(usersList);

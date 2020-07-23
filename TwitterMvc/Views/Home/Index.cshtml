@@ -8,19 +8,52 @@
     }
 }
 
-
-<div class="row mt-5">
-    @foreach (var user in Model)
-    {
-    <div class="col-md-3">
-        <a class="profile-link" asp-controller="Profile" asp-action="Index" asp-route-userId="@user.Id">
-            <div class="profile-avatar">
-                <img src="@GetImg(user.Gender)" />
-                <div class="profile-avatar-info">
-                    <p class="profile-avatar-info-username">@user.Username</p>
+    <div class="row">
+        <div class="col-md-8 mt-3 pr-3">
+            <div class="home-title">Users</div>
+            <div class="home-list p-4">
+                <div class="row">
+                    @foreach (var user in Model)
+                    {
+                        <div class="col-md-3">
+                            <a class="profile-link" asp-controller="Profile" asp-action="Index" asp-route-userId="@user.Id">
+                                <div class="profile-avatar">
+                                    <img src="@GetImg(user.Gender)" />
+                                    <div class="profile-avatar-info">
+                                        <p class="profile-avatar-info-username">@user.Username</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
-        </a>
+        </div>
+        <div class="col-md-4 mt-3 pl-3">
+            <div class="home-title">Following</div>
+            <div class="home-list p-4">
+                <div class="row">
+                    @if (ViewBag.Following != null)
+                    {
+                        @foreach (var followingUser in ViewBag.Following)
+                        {
+                            <div class="col-md-6">
+                                <a class="profile-link" asp-controller="Profile" asp-action="Index" asp-route-userId="@followingUser.Id">
+                                    <div class="profile-avatar">
+                                        <img src="@GetImg(followingUser.Gender)" />
+                                        <div class="profile-avatar-info">
+                                            <p class="profile-avatar-info-username">@followingUser.Username</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary" role="alert" style="margin: auto;">@ViewBag.Error</div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-    }
-</div>

@@ -12,5 +12,6 @@ namespace TwitterMvc.Services.Interfaces
         public Task<ReturnValues<bool>> UnFollow(string userId, string userToUnFollowId);
         public Task<ReturnValues<List<UserListItemDto>>> GetFollowers(string userId);
         public Task<ReturnValues<List<UserListItemDto>>> GetFollowing(string userId);
+        public Task<ReturnValues<bool>> Followed(string userId, string secondUserId);
     }
 }

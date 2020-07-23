@@ -49,6 +49,7 @@ namespace TwitterMvc
 
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IErrorService, ErrorService>();
+            services.AddScoped<IFollowService, FollowService>();
             
             services.AddAutoMapper(typeof(Startup));
         }

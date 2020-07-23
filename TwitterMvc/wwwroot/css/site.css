@@ -82,6 +82,16 @@ body {
     color: white;
 }
 
+.home-title {
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.home-list {
+    border: 2px solid #b2bec3;
+    border-radius: 5px;
+}
 
 .information {
     padding: 0 25px;
@@ -121,21 +131,23 @@ body {
     width: 100%;
 }
 
+.follow {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: pointer;
+}
+
 .follow-button {
-    background: #f03434;
     color: white;
     border-radius: .25rem;
     text-align: center;
     margin: 0;
 }
 
-.follow-text {
-    padding: .4rem .1rem;
-}
-
 .follow-number {
-    background: #f64747;
-    padding: .4rem .1rem;
+    background: #BDC3C7;
+    padding: .375rem .75rem;
+    border: 1px solid #BDC3C7;
     border-bottom-right-radius: .25rem;
     border-top-right-radius: .25rem;
 }

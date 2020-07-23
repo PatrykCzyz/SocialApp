@@ -75,12 +75,17 @@ namespace TwitterMvc.Services
                 return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("UserDosentExist"));
 
             var result = await _context.Follows.Where(x => x.UserId == userId)
-                .Select(x => new UserListItemDto(x.User)).ToListAsync();
+                .Select(x => new UserListItemDto(x.FollowUser)).ToListAsync();
 
             if (result.Count == 0)
                 return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("DontHaveFollowing"));
 
             return new ReturnValues<List<UserListItemDto>>(result);
+        }
+
+        public async Task<ReturnValues<bool>> Followed(string userId, string secondUser)
+        {
+            return new ReturnValues<bool>(await UserAlreadyFollowed(userId, secondUser));
         }
 
         #region Methods

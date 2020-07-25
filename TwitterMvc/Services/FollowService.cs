@@ -83,9 +83,13 @@ namespace TwitterMvc.Services
             return new ReturnValues<List<UserListItemDto>>(result);
         }
 
-        public async Task<ReturnValues<bool>> Followed(string userId, string secondUser)
+        public async Task<ReturnValues<bool>> Followed(string userId, string secondUserId)
         {
-            return new ReturnValues<bool>(await UserAlreadyFollowed(userId, secondUser));
+            if(!await UsersExists(userId, secondUserId))
+            {
+                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+            }
+            return new ReturnValues<bool>(await UserAlreadyFollowed(userId, secondUserId));
         }
 
         #region Methods

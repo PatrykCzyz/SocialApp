@@ -17,7 +17,7 @@ using TwitterMvc.Helpers.AutoMapper;
 using TwitterMvc.Services.Interfaces;
 using TwitterMvc.Tests.Helpers;
 
-namespace TwitterMvc.Tests
+namespace TwitterMvc.Tests.ServicesTests
 {
     public class PostServiceTests
     {

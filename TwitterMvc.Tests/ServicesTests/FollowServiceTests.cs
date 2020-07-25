@@ -382,5 +382,74 @@ namespace TwitterMvc.Tests.ServicesTests
             Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
         }
         #endregion
+
+        #region Followed
+        [Test]
+        [Category("Followed")]
+        public async Task Followed_Should_Return_True_When_User_Follow_SecondUser()
+        {
+            // Arrange
+            var followedUser = _fakeData.GetUser();
+            var follow = new Follow(_userId, followedUser.Id);
+            await _context.AddAsync(followedUser);
+            await _context.AddAsync(follow);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _followService.Followed(_userId, followedUser.Id);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.True(result.Content);
+        }
+
+        [Test]
+        [Category("Followed")]
+        public async Task Followed_Should_Return_False_When_User_NotFollow_SecondUser()
+        {
+            // Arrange
+            var followedUser = _fakeData.GetUser();
+            await _context.AddAsync(followedUser);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _followService.Followed(_userId, followedUser.Id);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.False(result.Content);
+        }
+
+        [Test]
+        [Category("Followed")]
+        public async Task Followed_Should_Return_Error_When_User_NotExist()
+        {
+            // Arrange
+            var followedUser = _fakeData.GetUser();
+            await _context.AddAsync(followedUser);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _followService.Followed(_wrongUserId, followedUser.Id);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+
+        [Test]
+        [Category("Followed")]
+        public async Task Followed_Should_Return_Error_When_SecondUser_NotExist()
+        {
+            // Arrange
+
+            // Act
+            var result = await _followService.Followed(_userId, _wrongUserId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+        #endregion
     }
 }

@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.AccountDtos;
 using TwitterMvc.Models;
 
 namespace TwitterMvc.Controllers
@@ -10,11 +14,13 @@ namespace TwitterMvc.Controllers
     {
         private readonly UserManager<CustomUser> _userManager;
         private readonly SignInManager<CustomUser> _signInManager;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager)
+        public AccountController(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -66,6 +72,41 @@ namespace TwitterMvc.Controllers
             }
 
             return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var editDto = _mapper.Map<EditDto>(user);
+
+            return View(editDto);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditDto editDto)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                user.UserName = editDto.UserName;
+                user.Email = editDto.Email;
+                user.Name = editDto.Name;
+                user.Lastname = editDto.Lastname;
+                user.Gender = editDto.Gender;
+                user.Age = (int)editDto.Age;
+                user.Country = editDto.Country;
+                
+                await _userManager.UpdateAsync(user);
+
+                return RedirectToAction("Index", "Profile");
+            }
+
+            return View(editDto);
         }
 
         [HttpGet]

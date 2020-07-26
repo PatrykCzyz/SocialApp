@@ -1,0 +1,48 @@
+@model TwitterMvc.Dtos.AccountDtos.EditDto
+
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post))
+{
+	@Html.LabelFor(m => m.UserName)
+	@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Email)
+	@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Name)
+	@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Lastname)
+	@Html.TextBoxFor(m => m.Lastname, new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.Lastname, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Gender)
+	@Html.DropDownListFor(m => m.Gender, Html.GetEnumSelectList(Model.Gender.GetType()), new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Age)
+	@Html.TextBoxFor(m => m.Age, new { @class = "form-control", type = "number" })
+	@Html.ValidationMessageFor(m => m.Age, "", new { @class = "text-danger" })
+
+	<br>
+
+	@Html.LabelFor(m => m.Country)
+	@Html.TextBoxFor(m => m.Country, new { @class = "form-control" })
+	@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+
+	<br>
+
+	<input type="submit" value="Edit" class="tn btn-outline-info mt-3" style="padding: 10px; width: 100%;">
+}

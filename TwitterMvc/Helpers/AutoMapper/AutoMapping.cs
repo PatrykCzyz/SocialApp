@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using TwitterMvc.Dtos;
+using TwitterMvc.Dtos.AccountDtos;
 using TwitterMvc.Models;
 
 namespace TwitterMvc.Helpers.AutoMapper
@@ -14,6 +15,7 @@ namespace TwitterMvc.Helpers.AutoMapper
             CreateMap<PostDto, Post>();
             CreateMap<Post, GetPostDto>();
             CreateMap<GetPostDto, PostDto>();
+            CreateMap<CustomUser, EditDto>();
         }
     }
 }

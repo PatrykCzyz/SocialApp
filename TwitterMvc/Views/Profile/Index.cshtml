@@ -57,6 +57,11 @@
         <div class="profile-info-field">Gender: @Model.Gender</div>
         <div class="profile-info-field">Country: @Model.Country</div>
 
+        @if (isOwnProfile)
+        {
+            <a class="btn btn-outline-info" asp-controller="Account" asp-action="Edit" style="width: 100%;">Edit</a>
+        }
+
         <div class="social">
             <div class="social-png">
                 <img src="/img/fb.png" />

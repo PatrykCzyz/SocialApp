@@ -15,5 +15,7 @@ namespace TwitterMvc.Data.Context
         public DbSet<CustomUser> CustomUsers { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
     }
 }

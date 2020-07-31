@@ -18,6 +18,7 @@ namespace TwitterMvc.Helpers
             errorList.Add("UserIsNotFollowed", "You don't follow this user.");
             errorList.Add("DontHaveFollowers", "You don't have any followers.");
             errorList.Add("DontHaveFollowing", "You don't follow anyone.");
+            errorList.Add("EmptyMessage", "Message cannot be empty.");
         }
         public string GetError(string errorKey)
         {

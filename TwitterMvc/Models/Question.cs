@@ -4,6 +4,18 @@ namespace TwitterMvc.Models
 {
     public class Question
     {
+        public Question()
+        {
+            
+        }
+        
+        public Question(string senderId, string recieverId, string message)
+        {
+            SenderId = senderId;
+            ReceiverId = recieverId;
+            Message = message;
+        }
+
         public int Id { get; set; }
         public string Message { get; set; }
         public DateTime SentTime { get; set; }

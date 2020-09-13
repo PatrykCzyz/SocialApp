@@ -59,5 +59,16 @@ namespace TwitterMvc.Tests.Helpers
 
             return postDtoFaker.Generate();
         }
+
+        public Question GetQuestion(string senderId, string recieverId)
+        {
+            var questionFaker = new Faker<Question>()
+                .RuleFor(o => o.SenderId, f => senderId)
+                .RuleFor(o => o.ReceiverId, f => recieverId)
+                .RuleFor(o => o.Message, f => f.Lorem.Sentence())
+                .RuleFor(o => o.SentTime, f => f.Date.Past());
+
+            return questionFaker.Generate();
+        }
     }
 }

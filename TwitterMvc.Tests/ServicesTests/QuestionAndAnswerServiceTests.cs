@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Helpers;
 using TwitterMvc.Helpers.AutoMapper;
+using TwitterMvc.Models;
 using TwitterMvc.Services;
 using TwitterMvc.Services.Interfaces;
 using TwitterMvc.Tests.Helpers;
@@ -66,8 +68,8 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.True(result.Succeeded);
-            var actualMessage =  (await _context.Questions.FirstOrDefaultAsync(x => x.SenderId == _userId)).Message;
-            Assert.AreEqual(message, actualMessage);
+            var actualQuestion =  (await _context.Questions.FirstOrDefaultAsync(x => x.SenderId == _userId));
+            Assert.AreEqual(message, actualQuestion.Message);
         }
 
         [TestCase(null)]
@@ -146,12 +148,291 @@ namespace TwitterMvc.Tests.ServicesTests
         #endregion
 
         #region AnswerToQuestion
+
+        [Test]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Answered_Correctly()
+        {
+            // Arrange
+            var user = _fakeData.GetUser();
+            var question = _fakeData.GetQuestion(user.Id, _userId);
+            await _context.AddAsync(user);
+            await _context.AddAsync(question);
+            await _context.SaveChangesAsync();
+
+            var answerText = "Some answer.";
+
+            // Act
+            var result = await _qnaService.AnswerToQuestion(_userId, question.Id, answerText);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == question.Id);
+            Assert.NotNull(actualAnswer);
+            Assert.AreEqual(answerText, actualAnswer.Message);
+        }
+
+        [Test]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Return_Error_When_Invalid_User()
+        {
+            // Arrange
+            var reciever = _fakeData.GetUser();
+            var question = _fakeData.GetQuestion(_userId, reciever.Id);
+            await _context.AddAsync(reciever);
+            await _context.AddAsync(question);
+            await _context.SaveChangesAsync();
+            
+            // Act
+            var result = await _qnaService.AnswerToQuestion(_userId, question.Id, "Some answer");
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("QuestionDoesntExist"), result.ErrorMessage);
+            var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == question.Id);
+            Assert.Null(actualAnswer);
+        }
+        
+        [Test]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Return_Error_When_Question_Doesnt_Exist()
+        {
+            // Arrange
+            var questionId = 5;
+
+            // Act
+            var result = await _qnaService.AnswerToQuestion(_userId, questionId, "Some answer");
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("QuestionDoesntExist"), result.ErrorMessage);
+            var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == questionId);
+            Assert.Null(actualAnswer);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Return_Error_When_AnswerText_Is_NullOrEmpty(string answer)
+        {
+            // Arrange
+            var sender = _fakeData.GetUser();
+            var question = _fakeData.GetQuestion(sender.Id, _userId);
+            await _context.AddAsync(sender);
+            await _context.AddAsync(question);
+            await _context.SaveChangesAsync();
+            
+            // Act
+            var result = await _qnaService.AnswerToQuestion(_userId, question.Id, answer);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("EmptyAnswer"), result.ErrorMessage);
+            var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == question.Id);
+            Assert.Null(actualAnswer);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Return_Error_When_User_Is_NullOrEmpty(string userId)
+        {
+            // Arrange
+            var sender = _fakeData.GetUser();
+            var question = _fakeData.GetQuestion(sender.Id, _userId);
+            await _context.AddAsync(sender);
+            await _context.AddAsync(question);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _qnaService.AnswerToQuestion(userId, question.Id, "Some answer");
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == question.Id);
+            Assert.Null(actualAnswer);
+        }
+        
+        [Test]
+        [Category("AnswerToQuestion")]
+        public async Task AnswerToQuestion_Should_Return_Error_When_Question_Is_Already_Answered()
+        {
+            // Arrange
+            var sender = _fakeData.GetUser();
+            var question = _fakeData.GetQuestion(sender.Id, _userId);
+            await _context.AddAsync(sender);
+            await _context.AddAsync(question);
+            var answer = new Answer()
+            {
+                AnsweredTime = DateTime.Now,
+                Message = "Some answer",
+                QuestionId = question.Id
+            };
+            await _context.AddAsync(answer);
+            await _context.SaveChangesAsync();
+            
+            // Act
+            var result = await _qnaService.AnswerToQuestion(_userId, question.Id, "Some other answer");
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("AlreadyAnswered"), result.ErrorMessage);
+        }
+        
         #endregion
 
         #region GetQuestions
+
+        [Test]
+        [Category("GetQuestions")]
+        public async Task GetQuestions_Should_GetQuestions_Correctly()
+        {
+            // Arrange
+            var questionsWithoutAnswerId = new List<int>();
+            
+            var sender = _fakeData.GetUser();
+            await _context.AddAsync(sender);
+            for (var i = 0; i < 6; i++)
+            {
+                await _context.AddAsync(new Question
+                {
+                    Id = i,
+                    SenderId = sender.Id,
+                    ReceiverId = _userId,
+                    Message = "Some question",
+                    SentTime = DateTime.Now
+                });
+
+                if (i % 2 != 0)
+                {
+                    questionsWithoutAnswerId.Add(i);
+                    continue;
+                }
+                
+                await _context.AddAsync(new Answer
+                {
+                    Message = "Some answer",
+                    AnsweredTime = DateTime.Now,
+                    QuestionId = i
+                });
+            }
+
+            // Act
+            var result = await _qnaService.GetQuestions(_userId);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(questionsWithoutAnswerId.Count, result.Content.Count);
+            result.Content.ForEach(x => Assert.True(questionsWithoutAnswerId.Contains(x.QuestionId)));
+        }
+        
+        [Test]
+        [Category("GetQuestions")]
+        public async Task GetQuestions_Should_Return_Error_When_User_Doesnt_Exist()
+        {
+            // Arrange
+            
+
+            // Act
+            var result = await _qnaService.GetQuestions(_wrongUserId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+        
+        [TestCase(null)]
+        [TestCase("")]
+        [Category("GetQuestions")]
+        public async Task GetQuestions_Should_Return_Error_When_User_Is_NullOrEmpty(string userId)
+        {
+            // Arrange
+            
+
+            // Act
+            var result = await _qnaService.GetQuestions(userId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+        
         #endregion
 
         #region GetAnsweredQuestions
+        
+        [Test]
+        [Category("GetAnsweredQuestions")]
+        public async Task GetAnsweredQuestions_Should_GetAnsweredQuestions_Correctly()
+        {
+            // Arrange
+            var questionsWithAnswerCount = 0;
+            
+            var sender = _fakeData.GetUser();
+            await _context.AddAsync(sender);
+            for (var i = 0; i < 6; i++)
+            {
+                await _context.AddAsync(new Question
+                {
+                    Id = i,
+                    SenderId = sender.Id,
+                    ReceiverId = _userId,
+                    Message = "Some question",
+                    SentTime = DateTime.Now
+                });
+
+                if (i % 2 != 0) continue;
+                
+                await _context.AddAsync(new Answer
+                {
+                    Message = "Some answer",
+                    AnsweredTime = DateTime.Now,
+                    QuestionId = i
+                });
+                questionsWithAnswerCount++;
+            }
+
+            // Act
+            var result = await _qnaService.GetAnsweredQuestions(_userId);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(questionsWithAnswerCount, result.Content.Count);
+            result.Content.ForEach(x => Assert.True(x.QuestionMessage != null && x.AnswerMessage != null));
+        }
+        
+        [Test]
+        [Category("GetAnsweredQuestions")]
+        public async Task GetAnsweredQuestions_Should_Return_Error_When_User_Doesnt_Exist()
+        {
+            // Arrange
+            
+
+            // Act
+            var result = await _qnaService.GetAnsweredQuestions(_wrongUserId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [Category("GetAnsweredQuestions")]
+        public async Task GetAnsweredQuestions_Should_Return_Error_When_User_Is_NullOrEmpty(string userId)
+        {
+            // Arrange
+            
+
+            // Act
+            var result = await _qnaService.GetAnsweredQuestions(userId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+        }
+
         #endregion
     }
 }

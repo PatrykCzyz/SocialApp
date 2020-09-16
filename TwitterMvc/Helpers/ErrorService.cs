@@ -25,7 +25,8 @@ namespace TwitterMvc.Helpers
         }
         public string GetError(string errorKey)
         {
-            return errorList[errorKey];
+            var result = errorList.TryGetValue(errorKey, out var value);
+            return result == true ? value : "Something went wrong.";
         }
     }
 }

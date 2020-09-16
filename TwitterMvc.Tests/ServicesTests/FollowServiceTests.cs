@@ -7,6 +7,7 @@ using NUnit.Framework;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Helpers;
 using TwitterMvc.Helpers.AutoMapper;
+using TwitterMvc.Helpers.ErrorHandler;
 using TwitterMvc.Models;
 using TwitterMvc.Services;
 using TwitterMvc.Services.Interfaces;
@@ -84,7 +85,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -98,7 +99,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -112,7 +113,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -126,7 +127,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -149,7 +150,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserIsAlreadyFollowed"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserIsAlreadyFollowed), result.ErrorMessage);
         }
         #endregion
 
@@ -190,7 +191,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -204,7 +205,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -218,7 +219,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -232,7 +233,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -249,7 +250,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserIsNotFollowed"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserIsNotFollowed), result.ErrorMessage);
         }
         #endregion
 
@@ -286,7 +287,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("DontHaveFollowers"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.DontHaveFollowers), result.ErrorMessage);
         }
 
         [Test]
@@ -300,7 +301,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -314,7 +315,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         #endregion
 
@@ -351,7 +352,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("DontHaveFollowing"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.DontHaveFollowing), result.ErrorMessage);
         }
 
         [Test]
@@ -365,7 +366,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -379,7 +380,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         #endregion
 
@@ -434,7 +435,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
 
         [Test]
@@ -448,7 +449,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         #endregion
     }

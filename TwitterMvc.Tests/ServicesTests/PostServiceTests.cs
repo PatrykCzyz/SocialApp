@@ -14,6 +14,7 @@ using Bogus;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
 using TwitterMvc.Helpers.AutoMapper;
+using TwitterMvc.Helpers.ErrorHandler;
 using TwitterMvc.Services.Interfaces;
 using TwitterMvc.Tests.Helpers;
 
@@ -116,7 +117,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             //Arrange
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         
         [Test]
@@ -130,7 +131,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             //Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         
         [Test]
@@ -144,7 +145,7 @@ namespace TwitterMvc.Tests.ServicesTests
             
             //Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("NoPost"),result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.NoPost),result.ErrorMessage);
         }
         
         #endregion
@@ -183,7 +184,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         
@@ -200,7 +201,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
         }
         
         [Test]
@@ -217,7 +218,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         
@@ -235,7 +236,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         
@@ -251,7 +252,7 @@ namespace TwitterMvc.Tests.ServicesTests
         
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
             Assert.AreEqual(0, posts.Count);
         }
         
@@ -300,7 +301,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("RemovePostFailed"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.RemovePostFailed), result.ErrorMessage);
         }
 
         [Test]
@@ -319,7 +320,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
             Assert.AreEqual(post.Count, actualPostCount);
         }
         
@@ -368,7 +369,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
             Assert.AreNotEqual(newPostData.Title, actualPost.Title);
             Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
@@ -392,7 +393,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
             Assert.AreNotEqual(newPostData.Title, actualPost.Title);
             Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
@@ -413,7 +414,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("PostDtoNotFilled"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.PostDtoNotFilled), result.ErrorMessage);
         }
 
         [Test]
@@ -434,7 +435,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
             Assert.AreNotEqual(newPostData.Title, actualPost.Title);
             Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
@@ -457,7 +458,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("UserDosentExist"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.UserDosentExist), result.ErrorMessage);
             Assert.AreNotEqual(newPostData.Title, actualPost.Title);
             Assert.AreNotEqual(newPostData.Content, actualPost.Content);
         }
@@ -480,7 +481,7 @@ namespace TwitterMvc.Tests.ServicesTests
 
             // Assert
             Assert.False(result.Succeeded);
-            Assert.AreEqual(_errorService.GetError("EditPostFailed"), result.ErrorMessage);
+            Assert.AreEqual(_errorService.GetError(Error.EditPostFailed), result.ErrorMessage);
         }
         
         #endregion

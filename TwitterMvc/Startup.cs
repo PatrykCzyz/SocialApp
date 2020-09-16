@@ -16,6 +16,7 @@ using TwitterMvc.Models;
 using TwitterMvc.Services;
 using TwitterMvc.Services.Interfaces;
 using AutoMapper;
+using TwitterMvc.Helpers.ErrorHandler;
 
 namespace TwitterMvc
 {

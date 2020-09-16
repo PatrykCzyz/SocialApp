@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos;
 using TwitterMvc.Helpers;
+using TwitterMvc.Helpers.ErrorHandler;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 
@@ -28,10 +29,10 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<bool>> CreatePost(string userId, PostDto postDto)
         {
             if (!await IsUserExist(userId))
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
             
             if (!IsPostDtoValid(postDto))
-                return new ReturnValues<bool>(_errorService.GetError("PostDtoNotFilled"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.PostDtoNotFilled));
             
             var post = GetEntityPost(userId, postDto);
 
@@ -61,14 +62,14 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<bool>> EditPost(string userId, int postId, PostDto postDto)
         {
             if (!await IsUserExist(userId))
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
 
             if (!IsPostDtoValid(postDto))
-                return new ReturnValues<bool>(_errorService.GetError("PostDtoNotFilled"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.PostDtoNotFilled));
 
             var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == userId);
             if (post == null)
-                return new ReturnValues<bool>(_errorService.GetError("EditPostFailed"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.EditPostFailed));
 
             post.Title = postDto.Title;
             post.Content = postDto.Content;
@@ -82,11 +83,11 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<List<GetPostDto>>> GetPosts(string userId)
         {
             if (!await IsUserExist(userId))
-                return new ReturnValues<List<GetPostDto>>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<List<GetPostDto>>(_errorService.GetError(Error.UserDosentExist));
             
             var data = await _context.Posts.Where(post => post.UserId == userId).OrderByDescending(post => post.DateTime).ToListAsync();
             if (data.Count == 0)
-                return new ReturnValues<List<GetPostDto>>(_errorService.GetError("NoPost"));
+                return new ReturnValues<List<GetPostDto>>(_errorService.GetError(Error.NoPost));
 
             var result = _mapper.Map<List<Post>, List<GetPostDto>>(data);
             
@@ -96,11 +97,11 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<bool>> RemovePost(string userId, int postId)
         {
             if(!await IsUserExist(userId))
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
 
             var post = await _context.Posts.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == postId);
             if(post == null)
-                return new ReturnValues<bool>(_errorService.GetError("RemovePostFailed"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.RemovePostFailed));
 
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();

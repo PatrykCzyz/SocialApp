@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos.UserDtos;
 using TwitterMvc.Helpers;
+using TwitterMvc.Helpers.ErrorHandler;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 
@@ -28,10 +29,10 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<bool>> Follow(string userId, string userToFollowId)
         {
             if(!await UsersExists(userId, userToFollowId))
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
 
             if(await UserAlreadyFollowed(userId, userToFollowId))
-                return new ReturnValues<bool>(_errorService.GetError("UserIsAlreadyFollowed"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserIsAlreadyFollowed));
 
             await _context.AddAsync(new Follow(userId, userToFollowId));
             await _context.SaveChangesAsync();
@@ -42,10 +43,10 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<bool>> UnFollow(string userId, string userToUnFollowId)
         {
             if (!await UsersExists(userId, userToUnFollowId))
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
 
             if (!await UserAlreadyFollowed(userId, userToUnFollowId))
-                return new ReturnValues<bool>(_errorService.GetError("UserIsNotFollowed"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserIsNotFollowed));
 
             var follow = await _context.Follows.FirstAsync(x => x.UserId == userId && x.FollowUserId == userToUnFollowId);
 
@@ -58,13 +59,13 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<List<UserListItemDto>>> GetFollowers(string userId)
         {
             if (!await UserExist(userId))
-                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError(Error.UserDosentExist));
 
             var result = await _context.Follows.Where(x => x.FollowUserId == userId)
                 .Select(x => new UserListItemDto(x.User)).ToListAsync();
 
             if (result.Count == 0)
-                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("DontHaveFollowers"));
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError(Error.DontHaveFollowers));
 
             return new ReturnValues<List<UserListItemDto>>(result);
         }
@@ -72,13 +73,13 @@ namespace TwitterMvc.Services
         public async Task<ReturnValues<List<UserListItemDto>>> GetFollowing(string userId)
         {
             if (!await UserExist(userId))
-                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError(Error.UserDosentExist));
 
             var result = await _context.Follows.Where(x => x.UserId == userId)
                 .Select(x => new UserListItemDto(x.FollowUser)).ToListAsync();
 
             if (result.Count == 0)
-                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError("DontHaveFollowing"));
+                return new ReturnValues<List<UserListItemDto>>(_errorService.GetError(Error.DontHaveFollowing));
 
             return new ReturnValues<List<UserListItemDto>>(result);
         }
@@ -87,7 +88,7 @@ namespace TwitterMvc.Services
         {
             if(!await UsersExists(userId, secondUserId))
             {
-                return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+                return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
             }
             return new ReturnValues<bool>(await UserAlreadyFollowed(userId, secondUserId));
         }

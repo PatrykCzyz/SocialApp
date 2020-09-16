@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterMvc.Data.Context;
 using TwitterMvc.Dtos.QuestionAndAnswerDtos;
 using TwitterMvc.Helpers;
+using TwitterMvc.Helpers.ErrorHandler;
 using TwitterMvc.Models;
 using TwitterMvc.Services.Interfaces;
 
@@ -28,10 +29,10 @@ namespace TwitterMvc.Services
     {
 		var usersExist = await _context.CustomUsers.CountAsync(x => x.Id == senderId || x.Id == receiverId);
 		if(usersExist != 2)
-			return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+			return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
 
 		if(string.IsNullOrEmpty(message))
-			return new ReturnValues<bool>(_errorService.GetError("EmptyMessage"));
+			return new ReturnValues<bool>(_errorService.GetError(Error.EmptyMessage));
 
 		var question = new Question(senderId, receiverId, message);
 
@@ -44,18 +45,18 @@ namespace TwitterMvc.Services
     public async Task<ReturnValues<bool>> AnswerToQuestion(string userId, int questionId, string answerMessage)
     {
         if(string.IsNullOrEmpty(userId))
-            return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+            return new ReturnValues<bool>(_errorService.GetError(Error.UserDosentExist));
         
         if (string.IsNullOrEmpty(answerMessage))
-            return new ReturnValues<bool>(_errorService.GetError("EmptyAnswer"));
+            return new ReturnValues<bool>(_errorService.GetError(Error.EmptyAnswer));
         
         var question = await _context.Questions
             .Include(i => i.Answer)
             .FirstOrDefaultAsync(x => x.Id == questionId && x.ReceiverId == userId);
         if(question == null)
-            return new ReturnValues<bool>(_errorService.GetError("QuestionDoesntExist"));
+            return new ReturnValues<bool>(_errorService.GetError(Error.QuestionDoesntExist));
         if(question.Answer != null)
-            return new ReturnValues<bool>(_errorService.GetError("AlreadyAnswered"));
+            return new ReturnValues<bool>(_errorService.GetError(Error.AlreadyAnswered));
 
         var answer = new Answer(answerMessage, questionId);
         await _context.AddRangeAsync(answer);

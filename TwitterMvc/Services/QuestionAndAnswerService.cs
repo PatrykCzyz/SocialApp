@@ -30,7 +30,7 @@ namespace TwitterMvc.Services
 		if(usersExist != 2)
 			return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
 
-		if(message == null || message == "")
+		if(string.IsNullOrEmpty(message))
 			return new ReturnValues<bool>(_errorService.GetError("EmptyMessage"));
 
 		var question = new Question(senderId, receiverId, message);
@@ -41,9 +41,27 @@ namespace TwitterMvc.Services
 		return new ReturnValues<bool>();
     }
 
-    public Task<ReturnValues<bool>> AnswerToQuestion(string userId, int questionId, string answer)
+    public async Task<ReturnValues<bool>> AnswerToQuestion(string userId, int questionId, string answerMessage)
     {
-      throw new System.NotImplementedException();
+        if(string.IsNullOrEmpty(userId))
+            return new ReturnValues<bool>(_errorService.GetError("UserDosentExist"));
+        
+        if (string.IsNullOrEmpty(answerMessage))
+            return new ReturnValues<bool>(_errorService.GetError("EmptyAnswer"));
+        
+        var question = await _context.Questions
+            .Include(i => i.Answer)
+            .FirstOrDefaultAsync(x => x.Id == questionId && x.ReceiverId == userId);
+        if(question == null)
+            return new ReturnValues<bool>(_errorService.GetError("QuestionDoesntExist"));
+        if(question.Answer != null)
+            return new ReturnValues<bool>(_errorService.GetError("AlreadyAnswered"));
+
+        var answer = new Answer(answerMessage, questionId);
+        await _context.AddRangeAsync(answer);
+        await _context.SaveChangesAsync();
+        
+        return new ReturnValues<bool>();
     }
 
     public Task<ReturnValues<List<GetAnswerdQuestionDto>>> GetAnsweredQuestions(string userId)

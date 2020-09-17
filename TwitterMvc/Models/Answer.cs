@@ -9,14 +9,14 @@ namespace TwitterMvc.Models
                 
         }
 
-        public Answer(string message, int questionId)
+        public Answer(string answerMessage, int questionId)
         {
-            Message = message;
+            AnswerMessage = answerMessage;
             QuestionId = questionId;
         }
         
         public int Id { get; set; }
-        public string Message { get; set; }
+        public string AnswerMessage { get; set; }
         public DateTime AnsweredTime { get; set; } = DateTime.Now;
         public int QuestionId { get; set; }
         public Question Question { get; set; }

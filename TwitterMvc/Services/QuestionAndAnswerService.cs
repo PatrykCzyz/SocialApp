@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,14 +66,43 @@ namespace TwitterMvc.Services
         return new ReturnValues<bool>();
     }
 
-    public Task<ReturnValues<List<GetAnswerdQuestionDto>>> GetAnsweredQuestions(string userId)
+    public async Task<ReturnValues<List<GetAnswerdQuestionDto>>> GetAnsweredQuestions(string userId)
     {
-      throw new System.NotImplementedException();
+        if (string.IsNullOrEmpty(userId) || await UserDoesntExist(userId))
+            return new ReturnValues<List<GetAnswerdQuestionDto>>(_errorService.GetError(Error.UserDosentExist));
+
+        var answeredQuestions = await _context.Answers
+            .Include(i => i.Question.Receiver)
+            .Include(i => i.Question.Sender)
+            .Where(x => x.Question.ReceiverId == userId)
+            .ToListAsync();
+
+        var result = _mapper.Map<List<GetAnswerdQuestionDto>>(answeredQuestions);
+        
+        return new ReturnValues<List<GetAnswerdQuestionDto>>(result);
     }
 
-    public Task<ReturnValues<List<GetQuestionDto>>> GetQuestions(string userId)
+    public async Task<ReturnValues<List<GetQuestionDto>>> GetQuestions(string userId)
     {
-      throw new System.NotImplementedException();
+        if (string.IsNullOrEmpty(userId) || await UserDoesntExist(userId))
+            return new ReturnValues<List<GetQuestionDto>>(_errorService.GetError(Error.UserDosentExist));
+
+        var questions = await _context.Questions
+            .Include(i => i.Answer)
+            .Where(x => x.ReceiverId == userId && x.Answer == null)
+            .ToListAsync();
+        var result = _mapper.Map<List<GetQuestionDto>>(questions);
+
+        return new ReturnValues<List<GetQuestionDto>>(result);
     }
+
+    #region Methods
+
+    private async Task<bool> UserDoesntExist(string userId)
+    {
+        return !await _context.Users.AnyAsync(x => x.Id == userId);
+    }
+
+    #endregion
   }
 }

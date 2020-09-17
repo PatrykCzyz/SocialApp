@@ -170,7 +170,7 @@ namespace TwitterMvc.Tests.ServicesTests
             Assert.True(result.Succeeded);
             var actualAnswer = await _context.Answers.FirstOrDefaultAsync(x => x.QuestionId == question.Id);
             Assert.NotNull(actualAnswer);
-            Assert.AreEqual(answerText, actualAnswer.Message);
+            Assert.AreEqual(answerText, actualAnswer.AnswerMessage);
         }
 
         [Test]
@@ -267,7 +267,7 @@ namespace TwitterMvc.Tests.ServicesTests
             var answer = new Answer()
             {
                 AnsweredTime = DateTime.Now,
-                Message = "Some answer",
+                AnswerMessage = "Some answer",
                 QuestionId = question.Id
             };
             await _context.AddAsync(answer);
@@ -294,7 +294,7 @@ namespace TwitterMvc.Tests.ServicesTests
             
             var sender = _fakeData.GetUser();
             await _context.AddAsync(sender);
-            for (var i = 0; i < 6; i++)
+            for (var i = 1; i < 6; i++)
             {
                 await _context.AddAsync(new Question
                 {
@@ -313,11 +313,13 @@ namespace TwitterMvc.Tests.ServicesTests
                 
                 await _context.AddAsync(new Answer
                 {
-                    Message = "Some answer",
+                    AnswerMessage = "Some answer",
                     AnsweredTime = DateTime.Now,
                     QuestionId = i
                 });
             }
+
+            await _context.SaveChangesAsync();
 
             // Act
             var result = await _qnaService.GetQuestions(_userId);
@@ -325,7 +327,7 @@ namespace TwitterMvc.Tests.ServicesTests
             // Assert
             Assert.True(result.Succeeded);
             Assert.AreEqual(questionsWithoutAnswerId.Count, result.Content.Count);
-            result.Content.ForEach(x => Assert.True(questionsWithoutAnswerId.Contains(x.QuestionId)));
+            result.Content.ForEach(x => Assert.True(questionsWithoutAnswerId.Contains(x.Id)));
         }
         
         [Test]
@@ -372,7 +374,7 @@ namespace TwitterMvc.Tests.ServicesTests
             
             var sender = _fakeData.GetUser();
             await _context.AddAsync(sender);
-            for (var i = 0; i < 6; i++)
+            for (var i = 1; i < 6; i++)
             {
                 await _context.AddAsync(new Question
                 {
@@ -387,12 +389,13 @@ namespace TwitterMvc.Tests.ServicesTests
                 
                 await _context.AddAsync(new Answer
                 {
-                    Message = "Some answer",
+                    AnswerMessage = "Some answer",
                     AnsweredTime = DateTime.Now,
                     QuestionId = i
                 });
                 questionsWithAnswerCount++;
             }
+            await _context.SaveChangesAsync();
 
             // Act
             var result = await _qnaService.GetAnsweredQuestions(_userId);

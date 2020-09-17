@@ -4,7 +4,7 @@ namespace TwitterMvc.Dtos.QuestionAndAnswerDtos
 {
     public class GetQuestionDto
     {
-        public int QuestionId { get; set; }
+        public int Id { get; set; }
         public string SenderId { get; set; }
         public string SenderName { get; set; }
         public string QuestionMessage { get; set; }
